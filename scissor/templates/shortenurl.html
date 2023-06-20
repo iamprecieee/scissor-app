@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %} 
+<br>
+    <h1 align="center" style="color:#ffffff">SHORTEN URL</h1>
+    <form method="POST">
+        <br>
+            <div><h5 style="color:#ffffff">original_url:</h5>
+                <input name="text" id="text" class="form-control"></input>
+            </div>
+        <br />
+        <br>
+            <div align="center">
+                <button type="submit" class="btn btn-lg btn-primary">SHORTEN</button>
+            </div>
+        <br />
+    </form>
+<br />
+<div align="center">
+    <a href="/home"><button type="button" class="btn btn-warning">BACK</button></a>
+</div>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends "base.html" %} 
+{% block title %}Home{% endblock %} 
+{% block content%}
+{% if current_user.is_authenticated %}
+    <br>
+    <h1 align="center" style="color:#ffffff">{% block header %}RECENT SHORT URLS{% endblock %}</h1>
+    <div id="urls">
+        {% for url in urls %}
+        <div style="background-color:rgb(248, 250, 251)" class="card border-dark">
+            <br>
+            <div style="background-color:rgb(72, 171, 243); color: rgb(255, 255, 255);" class="card justify-content-between align-items-center border-dark">
+                <a href="/dashboard{{url.user.email}}"></a>
+                <div><h5>Original URL: {{url.original_url}}</h5></div>
+                <br>
+                <div><h5>Shortened URL: {{url.short_url}}</h5></div>
+                <br>
+                <div><h5>Click Count: {{url.click_count}}</h5></div>
+                <br>
+                <div>
+                    <button align="center" type="button" class="btn btn-warning" onclick="toggleQR('{{ url.short_url }}')">QR Code</button>
+                    <br>
+                    <br>
+                    <div id="qr_{{ url.short_url }}" style="display: none;">
+                        <img src="" alt="QR Code">
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+        {% endfor %}
+    </div>
+    <br>
+
+    <br>
+    <h1 align="center" style="color:#ffffff">{% block header_custom_urls %}RECENT CUSTOM URLS{% endblock %}</h1>
+    <div id="custom_urls">
+        {% for url in custom_urls %}
+        <div style="background-color:rgb(159, 187, 202)" class="card border-dark">
+            <br>
+            <div style="background-color:rgb(200, 233, 250)" class="card justify-content-between align-items-center border-dark">
+                <a href="/dashboard{{url.user.email}}"></a>
+                <div><h5>Original URL: {{url.original_url}}</h5></div>
+                <br>
+                <div><h5>Custom Shortened URL: {{url.custom_short_url}}</h5></div>
+                <br>
+                <div><h5>Click Count: {{url.click_count}}</h5></div>
+                <br>
+                <div>
+                    <button type="button" class="btn btn-primary" onclick="toggleQR('{{ url.custom_short_url }}')">QR Code</button>
+                    <br>
+                    <br>
+                    <div id="qr_{{ url.custom_short_url }}" style="display: none;">
+                        <img src="" alt="QR Code">
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+        function toggleQR(urlKey) {
+            var qrDiv = document.getElementById("qr_" + urlKey);
+            var qrImg = qrDiv.querySelector("img");
+
+            if (qrDiv.style.display === "none") {
+                // QR code is hidden, show it
+                qrImg.src = "/generate_qr/" + urlKey;
+                qrDiv.style.display = "block";
+            } else {
+                // QR code is visible, hide it
+                qrDiv.style.display = "none";
+            }
+        }
+    </script>
+    {% block footer %}
+    {% if current_user.is_authenticated %}
+    <br>
+    <div align="center">
+      <a href="/shortenurl">
+        <button type="button" class="btn btn-primary btn-lg">
+          SHORTEN URL
+        </button></a>
+    </div>
+    <br>
+    <div align="center">
+      <a href="/customurl"
+        ><button type="button" class="btn btn-primary btn-lg">
+          CUSTOM URL
+        </button></a>
+    </div>
+    {% endif %}
+    {% endblock %} 
+{% else %}
+    <br>
+        <br>
+        <br>
+        <h2 align="center" style="color:#ffffff">WELCOME TO SCISSOR</h2>
+        <br>
+        <br>
+        <div align="center" class="about-text" style="color:#ffffff">
+            <h1 align="center">SHORTEN. SIMPLIFY. SHARE.</h1>
+            <br>
+            <p>
+            <br>
+            We believe in keeping things simple, so you can focus on what matters most.
+            <br>
+            Say goodbye to clunky URLs that get lost in the crowd. Scissor simplifies your links, making them shareable with a click.
+            <br>
+            Get valuable insights into your link's performance. Scissor's built-in analytics lets you see how many are clicking.
+            <br>
+            Scissor is designed with simplicity in mind. Just paste your long URL, hit "SHORTEN", and watch the magic happen. No technical jargon or complicated setup required.
+        
+            </p>
+            <p>
+                Unlock the power of concise sharing with Scissor. Make your links impactful, trackable, and effortlessly shareable. Shorten with Scissor and experience the difference.
+                <br>
+                <br>
+                <h3>JOIN SCISSOR TODAY!</h3>
+                <br>
+            </p>
+        </div>
+{% endif %}
+{% endblock %}
