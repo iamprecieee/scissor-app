@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, send_file
 from flask_login import login_required, current_user
 from .models import Url, CustomUrl
-from . import db, limiter
+from . import db
 import random, string, urllib.parse, qrcode, io, requests, logging
 
 views = Blueprint("views", __name__)
@@ -35,16 +35,16 @@ def home():
 
 @views.route("/shortenurl", methods=['GET', 'POST'])
 @login_required
-@limiter.limit("10 per minute")
+# @limiter.limit("10 per minute")
 def shortenurl():
     if request.method == "POST":
         text = request.form.get('text')
         if not text:
-            logger.error('Text cannot be empty')
+            logger.error('Text cannot be empty!')
         else:
             original_url = text
             if not validate_url(original_url):
-                logger.error('Invalid URL')
+                logger.error('Invalid URL!')
             else:
                 short_url = generate_short_url()
                 existing_url = Url.query.filter_by(original_url=original_url).first()
@@ -60,17 +60,17 @@ def shortenurl():
 
 @views.route("/customurl", methods=['GET', 'POST'])
 @login_required
-@limiter.limit("10 per minute")
+# @limiter.limit("10 per minute")
 def customurl():
     if request.method == "POST":
         text = request.form.get('text')
         text2 = request.form.get('text2')
         if not text or not text2:
-            logger.error('Text fields cannot be empty')
+            logger.error('Text fields cannot be empty!')
         else:
             original_url = text
             if not validate_url(original_url):
-                logger.error('Invalid URL')
+                logger.error('Invalid URL!')
                 return render_template("customurl.html")
             custom_short_url = text2
             existing_url = CustomUrl.query.filter_by(original_url=original_url).first()
@@ -85,7 +85,7 @@ def customurl():
     return render_template("customurl.html")
 
 @views.route('/<url_key>')
-@limiter.limit("10 per minute")
+# @limiter.limit("10 per minute")
 def redirection(url_key):
     url = Url.query.filter_by(short_url=url_key).first()
     if url is None:  # If no short_url is found, try to find a custom_short_url
@@ -95,19 +95,19 @@ def redirection(url_key):
         db.session.commit()
         return redirect(url.original_url)
     else:
-        flash('Invalid URL', category='error')
+        flash('Invalid URL!', category='error')
         return redirect(url_for('views.home'))
 
 @views.route('/generate_qr/<url_key>')
 @login_required
-@limiter.limit("10 per minute")
+# @limiter.limit("10 per minute")
 def generate_qr(url_key):
     """ Generates QR code """
     url = Url.query.filter_by(short_url=url_key).first()
     if url is None:
         url = CustomUrl.query.filter_by(custom_short_url=url_key).first()
     if not url or url.user_id != current_user.id:
-        flash('Invalid URL', category='error')
+        flash('Invalid URL!', category='error')
     qr = qrcode.QRCode(
         version=2,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
