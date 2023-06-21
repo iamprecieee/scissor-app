@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from . import db, limiter
+from . import db
 from .models import User
 from flask_login import login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,7 +8,6 @@ import uuid
 auth = Blueprint("auth", __name__)
 
 @auth.route("/login", methods=['GET', 'POST'])
-@limiter.limit("10 per minute")
 def login():
     if request.method == 'POST':
         identifier = request.form.get("identifier")
@@ -19,11 +18,10 @@ def login():
             flash(f"Good to have you back {user.username}", category='success')
             return redirect(url_for('views.home'))
         else:
-            flash('Email/Username does not exist.', category='error')
+            flash('Invalid Credentials!', category='error')
     return render_template("login.html")
 
 @auth.route("/signup", methods=['GET', 'POST'])
-@limiter.limit("10 per minute")
 def sign_up():
     if request.method == 'POST':
         username = request.form.get("username")
@@ -34,11 +32,11 @@ def sign_up():
         if email_exists:
             flash('Email already exists!', category='error')
         elif password1 != password2:
-            flash('Password does not match.', category='error')
+            flash('Password does not match!', category='error')
         elif len(password1) < 8:
-            flash('Password is too short.', category='error')
+            flash('Password is too short!', category='error')
         elif len(email) < 5:
-            flash('Invalid email.', category='error')
+            flash('Invalid email!', category='error')
         else:
             new_user = User(username=username, email=email, password=generate_password_hash(password1, method='pbkdf2:sha256'))
             db.session.add(new_user)
