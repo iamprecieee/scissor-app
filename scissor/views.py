@@ -31,7 +31,7 @@ def home():
     print("Home function triggered")
     urls = Url.query.all()
     custom_urls = CustomUrl.query.all()
-    return render_template("home.html", user = current_user, urls = urls, custom_urls=custom_urls)
+    return render_template("home.html", user = current_user, urls = urls, custom_urls=custom_urls, server_name=current_app.config['SERVER_NAME'])
 
 @views.route("/shortenurl", methods=['GET', 'POST'])
 @login_required
