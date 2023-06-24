@@ -14,6 +14,10 @@ def test_signup(client, db):
     assert check_password_hash(user.password, "testpassword")
     assert response.status_code == 200
 
+    # teardown: delete the user after the test
+    db.session.delete(user)
+    db.session.commit()
+
 def test_login(client, db):
     hashed_password = generate_password_hash("testpassword")
     user = User(username="test", email="test@example.com", password=hashed_password)
