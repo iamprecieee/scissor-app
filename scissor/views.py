@@ -51,7 +51,7 @@ def shortenurl():
                 if existing_url is not None:
                     logger.error('URL already exists!')
                 else:
-                    new_url = Url(original_url=original_url, short_url=short_url, user_id=current_user.id)
+                    new_url = Url(original_url=original_url, short_url='http://' + current_app.config['SERVER_NAME'] + '/' + short_url, user_id=current_user.id)
                     db.session.add(new_url)
                     db.session.commit()
                     logger.info('Post created!')
