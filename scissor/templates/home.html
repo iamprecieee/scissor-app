@@ -10,9 +10,9 @@
             <br>
             <div style="background-color:rgb(72, 171, 243); color: rgb(255, 255, 255);" class="card justify-content-between align-items-center border-dark">
                 <a href="/dashboard{{url.user.email}}"></a>
-                <div><h5>Original URL: {{url.original_url}}</h5></div>
+                <div><h5>Original URL: <a href="{{url.original_url}}" target="_blank">{{url.original_url}}</a></h5></div>
                 <br>
-                <div><h5>Shortened URL: {{url.short_url}}</h5></div>
+                <div><h5>Shortened URL: <a href="http://{{ server_name }}/{{url.short_url}}" target="_blank">{{url.short_url}}</a></h5></div>
                 <br>
                 <div><h5>Click Count: {{url.click_count}}</h5></div>
                 <br>
@@ -39,9 +39,9 @@
             <br>
             <div style="background-color:rgb(72, 171, 243); color: rgb(255, 255, 255);" class="card justify-content-between align-items-center border-dark">
                 <a href="/dashboard{{url.user.email}}"></a>
-                <div><h5>Original URL: {{url.original_url}}</h5></div>
+                <div><h5>Original URL: <a href="{{url.original_url}}" target="_blank">{{url.original_url}}</a></h5></div>
                 <br>
-                <div><h5>Custom Shortened URL: {{url.custom_short_url}}</h5></div>
+                <div><h5>Custom Shortened URL: <a href="http://{{ server_name }}/{{url.custom_short_url}}" target="_blank">{{url.custom_short_url}}</a></h5></div>
                 <br>
                 <div><h5>Click Count: {{url.click_count}}</h5></div>
                 <br>
