@@ -24,13 +24,16 @@ def create_app(config_name=None):
     db.init_app(app)
     migrate.init_app(app, db)
 
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    REDIS_URL = os.getenv("REDIS_URL")
     
     global cache
-    cache = Cache(app, config={'CACHE_TYPE': 'redis', 'CACHE_REDIS_URL': 'redis://localhost:6379/0'})
+    cache = Cache(app, config={'CACHE_TYPE': 'redis', 'CACHE_REDIS_URL': REDIS_URL})
     
     global limiter
-    limiter = Limiter(key_func=get_remote_address, app=app, storage_uri="redis://localhost:6379/0")
+    limiter = Limiter(key_func=get_remote_address, app=app, storage_uri=REDIS_URL)
+
 
     from .views import views
     from .auth import auth
