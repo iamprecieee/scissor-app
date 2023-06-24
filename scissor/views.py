@@ -114,7 +114,7 @@ def generate_qr(url_key):
         box_size=5,
         border=1,
     )
-    qr.add_data('http://' + current_app.config['SERVER_NAME'] + '/' +url_key)
+    qr.add_data(url_key)
     qr.make(fit=True)
     img = qr.make_image(fill='blue', back_color="white")
     # Save QR code image to a bytes buffer
