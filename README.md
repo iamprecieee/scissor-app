@@ -28,4 +28,4 @@ Unlock the power of concise sharing with Scissor. Make your links impactful, tra
 
 
 <br/>
-Live link: <a href="https://app-scissors.onrender.com/">SCISSOR</a>
+Live link: <a href="https://scissor-app.onrender.com">SCISSOR</a>
