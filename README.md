@@ -10,10 +10,15 @@ The Scissor App is a Flask-based URL shortener web application that shortens lon
 Here are the main components of the Scissor App:
 
 **Flask**: A micro web framework written in Python that is easy to use and provides the flexibility to use extensions like Flask-SQLAlchemy and Flask-Login.
+
 **Flask-SQLAlchemy**: A Flask extension that simplifies the use of SQLAlchemy, which is an Object Relational Mapper (ORM) that allows interaction with the database in an object-oriented way.
+
 **Flask-Login**: A Flask extension that provides user session management. It handles the common tasks of logging in, logging out, and remembering users’ sessions over extended periods.
+
 **Flask-Limiter**: Used to limit the rate of requests that clients can make to the app. The limiting is achieved through setting various decorators on the routes.
+
 **Flask-Caching**: This is a Flask extension that adds caching support to your Flask application. It has support for various caching backends and it is compatible with Flask-Limiter.
+
 **Flask-Migrate**: Handles SQLAlchemy database migrations for Flask applications using Alembic.
 
 
@@ -28,16 +33,23 @@ Each shortened (or custom-shortened) URL is unique. When the URL is visited, the
 Here is the structure of the Scissor app:
 
 **__init__.py**: This is where the Flask app is created and configured. The SQLAlchemy database, Flask login manager, and Flask limiter are also initialized here.
+
 **auth.py**: This module contains routes for user authentication (signup, login, logout).
+
 **config.py**: This module contains configuration settings for the app. Sensitive information is fetched from environment variables for security.
+
 **models.py**: This module contains the SQLAlchemy ORM models (User, Url, CustomUrl).
+
 **views.py**: This module contains the main routes of the application. This includes routes for displaying the home page, handling URL shortening, URL redirection, and QR code generation.
 
 The app relies on environment variables for some sensitive information. Make sure you have the following variables set in your environment:
 
 **SECRET_KEY**: A secret key for your application, used for session signing.
+
 **DATABASE_URI**: The database URI that should be used for the connection.
+
 **SERVER_NAME**: The name and port number of the server.
+
 **REDIS_URL**: The URL to connect to the Redis server.
 
 *Rate Limiting*
