@@ -31,7 +31,7 @@ Each shortened (or custom-shortened) URL is unique. When the URL is visited, the
 
 
 ## App Structure
-Here is the structure of the Scissor app:
+### Here is the structure of the Scissor app:
 
 **__init__.py**: This is where the Flask app is created and configured. The SQLAlchemy database, Flask login manager, and Flask limiter are also initialized here.
 
@@ -53,7 +53,7 @@ The app relies on environment variables for some sensitive information. Make sur
 
 **REDIS_URL**: The URL to connect to the Redis server.
 
-Here are the endpoints used in the Scissor app:
+### Here are the endpoints used in the Scissor app:
 
 **/ or /home**: The home page of the application. Displays all shortened URLs for the currently logged-in user.
 
@@ -110,11 +110,11 @@ Unlock the power of concise sharing with Scissor. Make your links impactful, tra
 
 ## Installation
 
-Clone the repository to your local environment. In the project's root directory, run the following command to install the necessary dependencies:
+### Clone the repository to your local environment. In the project's root directory, run the following command to install the necessary dependencies:
 
 *pip install -r requirements.txt*
 
-Set up the necessary environment variables:
+### Set up the necessary environment variables:
 
 *export SECRET_KEY=<your-secret-key>*
 
@@ -126,9 +126,25 @@ Set up the necessary environment variables:
 
 ## Usage
 
-To run the server, use the following command in the root directory:
+### To run the server, use the following command in the root directory:
 
 *flask run*
+
+### To initialize the migrations for the first time, run:
+
+*flask db init*
+
+This will create the migrations folder and the necessary configuration files inside it.
+
+### To generate a migration script after modifying the database models, use:
+
+*flask db migrate -m "message"*
+
+Where "message" is a brief description of the changes made.
+
+### Finally, to apply the migrations to the database, use:
+
+*flask db upgrade*
 
 
 
