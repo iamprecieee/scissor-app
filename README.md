@@ -8,7 +8,7 @@ Scissor is a URL shortener application which takes a long URL as input and provi
 
 
 ## Main Components
-Here are the main components of the Scissor App:
+### Here are the main components of the Scissor App:
 
 **Flask**: A micro web framework written in Python that is easy to use and provides the flexibility to use extensions like Flask-SQLAlchemy and Flask-Login.
 
@@ -43,7 +43,7 @@ Each shortened (or custom-shortened) URL is unique. When the URL is visited, the
 
 **views.py**: This module contains the main routes of the application. This includes routes for displaying the home page, handling URL shortening, URL redirection, and QR code generation.
 
-The app relies on environment variables for some sensitive information. Make sure you have the following variables set in your environment:
+### The app relies on environment variables for some sensitive information. Make sure you have the following variables set in your environment:
 
 **SECRET_KEY**: A secret key for your application, used for session signing.
 
