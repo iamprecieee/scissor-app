@@ -71,23 +71,23 @@ Here are the endpoints used in the Scissor app:
 
 **/generate_qr/<url_key>**: Generate a QR code for the provided url_key. Requires login.
 
-***Database Migrations***
+***Database Migrations***:
 The application uses Flask-Migrate, which is a Flask extension that handles SQLAlchemy database migrations. This is especially useful as it provides a command-line interface for performing migrations, including creating migration scripts automatically.
 The migration scripts are stored in a migrations folder in the root of the project. They provide a version history of the database schema, which can be navigated using the Flask-Migrate commands.
 
-***User Authentication***
+***User Authentication***:
 The application includes user authentication. Users can sign up for a new account, log in to an existing account, and log out. The application uses hashed passwords for security. This is handled by the werkzeug.security module.
 
-***Rate Limiting***
+***Rate Limiting***:
 The application uses rate limiting to protect against abuse. This is handled by Flask-Limiter. The login, signup, URL shortening, and URL redirection endpoints are all limited to 10 requests per minute.
 
-***Caching***
+***Caching***:
 The application uses Flask-Caching with a Redis backend for caching. The cache is primarily used to store the results of URL shortening requests, which allows the application to quickly return results for repeat requests without needing to access the database. If the connection to the Redis server is lost, the application will fall back to using a simple memory-based cache.
 
-***Exception Handling***
+***Exception Handling***:
 The application includes basic exception handling. In the case of a bad request or an internal server error, the application will return an appropriate HTTP status code and a descriptive error message.
 
-***Analytics***
+***Analytics***:
 In addition to shortening URLs, the application also provides some basic analytics for each shortened URL. It tracks the number of times each URL is clicked. This information is displayed next to each URL on the home page.
 
 
@@ -117,8 +117,11 @@ Clone the repository to your local environment. In the project's root directory,
 Set up the necessary environment variables:
 
 *export SECRET_KEY=<your-secret-key>
+
 export DATABASE_URI=<your-database-uri>
+
 export SERVER_NAME=<your-server-name>
+
 export REDIS_URL=<your-redis-url>*
 
 ## Usage
