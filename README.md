@@ -1,7 +1,9 @@
 # SCISSOR: Shorten. Simplify. Share.
 
 
+
 The Scissor App is a Flask-based URL shortener web application that shortens long URLs to more convenient and secure "short URLs" and "custom URLs", with user management functionality and rate limiting.
+
 
 
 ## Main Components
@@ -15,9 +17,11 @@ Here are the main components of the Scissor App:
 **Flask-Migrate**: Handles SQLAlchemy database migrations for Flask applications using Alembic.
 
 
+
 ## How Scissor Works
 After a user signs up or logs in, they can enter any long URL into the provided form. The Scissor App will first check that the URL is valid, and then create a short URL (or a custom URL) that redirects to the original URL. All the short URLs and custom URLs are associated with the user who created them.
 Each shortened (or custom-shortened) URL is unique. When the URL is visited, the application increments a click count, tracking how many times the link has been used. Also, users can generate a QR code for their short URL or custom URL.
+
 
 
 ## App Structure
@@ -41,6 +45,7 @@ Scissor app uses rate limiting to protect the app against DoS attacks and to pre
 
 *Caching*
 Scissor app uses caching to improve performance. It uses Flask-Caching extension with Redis as the backend. It is used together with Flask-Limiter to limit the number of requests. The connection settings for Redis are configured in __init__.py.
+
 
 
 ## Why Scissor?
