@@ -1,10 +1,20 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, send_file
+from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app as app, send_file
 from flask_login import login_required, current_user
 from .models import Url, CustomUrl
-from . import db, limiter
+from . import db
 import random, string, urllib.parse, qrcode, io, requests, logging 
+from functools import wraps
 
 views = Blueprint("views", __name__)
+
+def limit(key):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            limiter = app.limiter.limit(key)
+            return limiter(f)(*args, **kwargs)
+        return decorated_function
+    return decorator
 
 #random URL generation
 def generate_short_url():
@@ -31,11 +41,11 @@ def home():
     print("Home function triggered")
     urls = Url.query.all()
     custom_urls = CustomUrl.query.all()
-    return render_template("home.html", user = current_user, urls = urls, custom_urls=custom_urls, server_name=current_app.config['SERVER_NAME'])
+    return render_template("home.html", user = current_user, urls = urls, custom_urls=custom_urls, server_name=app.config['SERVER_NAME'])
 
 @views.route("/shortenurl", methods=['GET', 'POST'])
 @login_required
-@limiter.limit("10 per minute")
+@limit("10 per minute")
 def shortenurl():
     if request.method == "POST":
         text = request.form.get('text')
@@ -45,11 +55,13 @@ def shortenurl():
             original_url = text
             if not validate_url(original_url):
                 logger.error('Invalid URL')
+                return render_template("shortenurl.html")
             else:
                 short_url = generate_short_url()
                 existing_url = Url.query.filter_by(original_url=original_url).first()
                 if existing_url is not None:
                     logger.error('URL already exists!')
+                    return render_template("shortenurl.html")
                 else:
                     new_url = Url(original_url=original_url, short_url=short_url, user_id=current_user.id)
                     db.session.add(new_url)
@@ -60,7 +72,7 @@ def shortenurl():
 
 @views.route("/customurl", methods=['GET', 'POST'])
 @login_required
-@limiter.limit("10 per minute")
+@limit("10 per minute")
 def customurl():
     if request.method == "POST":
         text = request.form.get('text')
@@ -76,6 +88,7 @@ def customurl():
             existing_url = CustomUrl.query.filter_by(original_url=original_url).first()
             if existing_url is not None:
                 logger.error('URL already exists!')
+                return render_template("customurl.html")
             else:
                 new_url = CustomUrl(original_url=original_url, custom_short_url=custom_short_url, user_id=current_user.id)
                 db.session.add(new_url)
@@ -85,7 +98,7 @@ def customurl():
     return render_template("customurl.html")
 
 @views.route('/<url_key>')
-@limiter.limit("10 per minute")
+@limit("10 per minute")
 def redirection(url_key):
     url = Url.query.filter_by(short_url=url_key).first()
     if url is None:  # If no short_url is found, try to find a custom_short_url
@@ -100,7 +113,7 @@ def redirection(url_key):
 
 @views.route('/generate_qr/<url_key>')
 @login_required
-@limiter.limit("10 per minute")
+@limit("10 per minute")
 def generate_qr(url_key):
     """ Generates QR code """
     url = Url.query.filter_by(short_url=url_key).first()
@@ -108,13 +121,14 @@ def generate_qr(url_key):
         url = CustomUrl.query.filter_by(custom_short_url=url_key).first()
     if not url or url.user_id != current_user.id:
         flash('Invalid URL', category='error')
+        return redirect(url_for('views.home'))
     qr = qrcode.QRCode(
         version=2,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
         box_size=5,
         border=1,
     )
-    qr.add_data('http://' + current_app.config['SERVER_NAME'] + '/' +url_key)
+    qr.add_data('http://' + app.config['SERVER_NAME'] + '/' +url_key)
     qr.make(fit=True)
     img = qr.make_image(fill='blue', back_color="white")
     # Save QR code image to a bytes buffer
