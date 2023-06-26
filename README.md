@@ -2,7 +2,8 @@
 
 
 
-The Scissor App is a Flask-based URL shortener web application that shortens long URLs to more convenient and secure "short URLs" and "custom URLs", with user management functionality and rate limiting.
+## Description
+Scissor is a URL shortener application which takes a long URL as input and provides a shortened version of the URL. The application is built using Flask, a Python web framework, and uses SQLAlchemy for the ORM (Object-Relational Mapping) layer and SQLite as the database. The application also uses Flask-Migrate for handling database schema migrations, which makes it easier to adapt the database schema as the application evolves over time.
 
 
 
@@ -52,11 +53,42 @@ The app relies on environment variables for some sensitive information. Make sur
 
 **REDIS_URL**: The URL to connect to the Redis server.
 
-*Rate Limiting*
-Scissor app uses rate limiting to protect the app against DoS attacks and to prevent abuse. The @limit decorator is used to limit certain routes, allowing only a certain number of requests per minute.
+Here are the endpoints used in the Scissor app:
 
-*Caching*
-Scissor app uses caching to improve performance. It uses Flask-Caching extension with Redis as the backend. It is used together with Flask-Limiter to limit the number of requests. The connection settings for Redis are configured in __init__.py.
+**/ or /home**: The home page of the application. Displays all shortened URLs for the currently logged-in user.
+
+**/login**: Log in to the application. Limited to 10 attempts per minute.
+
+**/signup**: Sign up for a new account. Limited to 10 attempts per minute.
+
+**/logout**: Log out of the application.
+
+**/shortenurl**: Generate a shortened URL. Requires login.
+
+**/customurl**: Generate a custom shortened URL. Requires login.
+
+**/<url_key>**: Redirect to the original URL corresponding to the provided url_key.
+
+**/generate_qr/<url_key>**: Generate a QR code for the provided url_key. Requires login.
+
+***Database Migrations***
+The application uses Flask-Migrate, which is a Flask extension that handles SQLAlchemy database migrations. This is especially useful as it provides a command-line interface for performing migrations, including creating migration scripts automatically.
+The migration scripts are stored in a migrations folder in the root of the project. They provide a version history of the database schema, which can be navigated using the Flask-Migrate commands.
+
+***User Authentication***
+The application includes user authentication. Users can sign up for a new account, log in to an existing account, and log out. The application uses hashed passwords for security. This is handled by the werkzeug.security module.
+
+***Rate Limiting***
+The application uses rate limiting to protect against abuse. This is handled by Flask-Limiter. The login, signup, URL shortening, and URL redirection endpoints are all limited to 10 requests per minute.
+
+***Caching***
+The application uses Flask-Caching with a Redis backend for caching. The cache is primarily used to store the results of URL shortening requests, which allows the application to quickly return results for repeat requests without needing to access the database. If the connection to the Redis server is lost, the application will fall back to using a simple memory-based cache.
+
+***Exception Handling***
+The application includes basic exception handling. In the case of a bad request or an internal server error, the application will return an appropriate HTTP status code and a descriptive error message.
+
+***Analytics***
+In addition to shortening URLs, the application also provides some basic analytics for each shortened URL. It tracks the number of times each URL is clicked. This information is displayed next to each URL on the home page.
 
 
 
@@ -73,6 +105,29 @@ Versatile Applications: From social media buffs to email marketers and website o
 User-Friendly Experience: Scissor's sleek interface puts you in control. Shorten and customize your URLs with ease, saving time and boosting productivity. We believe in keeping things simple, so you can focus on what matters most.
 
 Unlock the power of concise sharing with Scissor. Make your links impactful, trackable, and effortlessly shareable. Join Scissor today and redefine the way you communicate online. Shorten with Scissor and experience the difference.
+
+
+
+## Installation
+
+Clone the repository to your local environment. In the project's root directory, run the following command to install the necessary dependencies:
+
+*pip install -r requirements.txt*
+
+Set up the necessary environment variables:
+
+*export SECRET_KEY=<your-secret-key>
+export DATABASE_URI=<your-database-uri>
+export SERVER_NAME=<your-server-name>
+export REDIS_URL=<your-redis-url>*
+
+## Usage
+
+To run the server, use the following command in the root directory:
+
+*flask run*
+
+
 
 ## Built with:
 ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
