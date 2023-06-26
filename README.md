@@ -116,13 +116,13 @@ Clone the repository to your local environment. In the project's root directory,
 
 Set up the necessary environment variables:
 
-*export SECRET_KEY=<your-secret-key>
+*export SECRET_KEY=<your-secret-key>*
 
-export DATABASE_URI=<your-database-uri>
+*export DATABASE_URI=<your-database-uri>*
 
-export SERVER_NAME=<your-server-name>
+*export SERVER_NAME=<your-server-name>*
 
-export REDIS_URL=<your-redis-url>*
+*export REDIS_URL=<your-redis-url>*
 
 ## Usage
 
