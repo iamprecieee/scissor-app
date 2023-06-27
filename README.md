@@ -158,4 +158,4 @@ Where "message" is a brief description of the changes made.
 
 
 <br/>
-Live link: <a href="https://scissor-app.onrender.com">SCISSOR</a>
+Live link: <a href="https://scssr.tech">SCISSOR</a>
