@@ -14,6 +14,7 @@ class Url(db.Model):
     original_url = db.Column(db.String(500), unique=True, nullable=False)
     short_url = db.Column(db.String(120), unique=True, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    date_created = db.Column(db.DateTime, server_default=db.func.now())
     click_count = db.Column(db.Integer, default=0)
 
 class CustomUrl(db.Model):
@@ -21,4 +22,5 @@ class CustomUrl(db.Model):
     original_url = db.Column(db.String(500), unique=True, nullable=False)
     custom_short_url = db.Column(db.String(120), unique=True, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    date_created = db.Column(db.DateTime, server_default=db.func.now())
     click_count = db.Column(db.Integer, default=0)
