@@ -8,3 +8,6 @@ class Config:
     REDIS_URL = os.getenv("REDIS_URL")
     CACHE_TYPE = 'redis'
     CACHE_REDIS_URL = REDIS_URL
+
+    if SQLALCHEMY_DATABASE_URI.startswith("postgres://"):
+        SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI.replace("postgres://", "postgresql://", 1)
