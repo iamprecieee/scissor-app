@@ -136,3 +136,37 @@ def generate_qr(url_key):
     img.save(image_buffer)
     image_buffer.seek(0)
     return send_file(image_buffer, mimetype='image/png')
+
+@views.route('/<url_key>/delete')
+@login_required
+def delete(url_key):
+    url = Url.query.filter_by(short_url=url_key).first()
+    if url is None:
+        url = CustomUrl.query.filter_by(custom_short_url=url_key).first()
+    if url:
+        db.session.delete(url)
+        db.session.commit()
+        return redirect(url_for('views.home'))
+    flash('Invalid URL', category='error')
+    return redirect(url_for('views.home'))
+
+
+@views.route('/<url_key>/edit', methods=['GET', 'POST'])
+@login_required
+@limit("10 per minute")
+def update(url_key):
+    custom_url = CustomUrl.query.filter_by(custom_short_url=url_key).first()
+    host = request.host_url
+    if custom_url:
+        if request.method == 'POST':
+            custom_path = request.form['custom_path']
+            if custom_path:
+                link_exists = CustomUrl.query.filter_by(custom_short_url=custom_path).first()
+                if link_exists:
+                    flash('That custom path already exists. Please try another.')
+                    return redirect(url_for('views.update', url_key=url_key))
+                custom_url.custom_short_url = custom_path
+                db.session.commit()
+                return redirect(url_for('views.home'))
+        return render_template('edit.html', url=custom_url, host=host)
+    return render_template('home.html')
