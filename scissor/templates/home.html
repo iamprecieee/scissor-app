@@ -10,19 +10,27 @@
             <br>
             <div style="background-color:rgb(72, 171, 243); color: rgb(255, 255, 255);" class="card justify-content-between align-items-center border-dark">
                 <a href="/dashboard{{url.user.email}}"></a>
-                <div><h5>Original URL: <a href="{{url.original_url}}" target="_blank">{{url.original_url}}</a></h5></div>
-                <br>
-                <div><h5>Shortened URL: <a href="http://{{ server_name }}/{{url.short_url}}" target="_blank">{{url.short_url}}</a></h5></div>
-                <br>
-                <div><h5>Click Count: {{url.click_count}}</h5></div>
+                <div>
+                    <br>
+                    <h5>Original URL: <a href="{{url.original_url}}" target="_blank">{{url.original_url}}</a></h5>
+                </div>
                 <br>
                 <div>
-                    <button align="center" type="button" class="btn btn-warning" onclick="toggleQR('{{ url.short_url }}')">QR Code</button>
+                    <h5>Shortened URL: <a href="http://{{ server_name }}/{{url.short_url}}" target="_blank">{{url.short_url}}</a></h5>
+                </div>
+                <div>
+                    <button align="center" type="button" class="btn btn-info btn-sm" onclick="toggleQR('{{ url.short_url }}')">QR Code</button>
+                    <a href="{{ url_for('views.delete', url_key=url.short_url) }}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+                </div>
+                <div id="qr_{{ url.short_url }}" style="display: none;">
                     <br>
+                    <img src="" alt="QR Code">
                     <br>
-                    <div id="qr_{{ url.short_url }}" style="display: none;">
-                        <img src="" alt="QR Code">
-                    </div>
+                </div>
+                <div>
+                    <br>
+                    <h5>Click Count: {{url.click_count}}</h5>
+                    <br>
                 </div>
             </div>
             <br>
@@ -39,19 +47,28 @@
             <br>
             <div style="background-color:rgb(72, 171, 243); color: rgb(255, 255, 255);" class="card justify-content-between align-items-center border-dark">
                 <a href="/dashboard{{url.user.email}}"></a>
-                <div><h5>Original URL: <a href="{{url.original_url}}" target="_blank">{{url.original_url}}</a></h5></div>
-                <br>
-                <div><h5>Custom Shortened URL: <a href="http://{{ server_name }}/{{url.custom_short_url}}" target="_blank">{{url.custom_short_url}}</a></h5></div>
-                <br>
-                <div><h5>Click Count: {{url.click_count}}</h5></div>
+                <div>
+                    <br>
+                    <h5>Original URL: <a href="{{url.original_url}}" target="_blank">{{url.original_url}}</a></h5>
+                </div>
                 <br>
                 <div>
-                    <button align="center" type="button" class="btn btn-warning" onclick="toggleQR('{{ url.custom_short_url }}')">QR Code</button>
+                    <h5>Custom Shortened URL: <a href="http://{{ server_name }}/{{url.custom_short_url}}" target="_blank">{{url.custom_short_url}}</a></h5>
+                </div>
+                <div>
+                    <button align="center" type="button" class="btn btn-info btn-sm" onclick="toggleQR('{{ url.custom_short_url }}')">QR Code</button>
+                    <a href="{{ url_for('views.update', url_key=url.custom_short_url) }}"><button type="button" class="btn btn-warning btn-sm">Edit</button></a>
+                    <a href="{{ url_for('views.delete', url_key=url.custom_short_url) }}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+                </div>
+                <div id="qr_{{ url.custom_short_url }}" style="display: none;">
                     <br>
+                    <img src="" alt="QR Code">
                     <br>
-                    <div id="qr_{{ url.custom_short_url }}" style="display: none;">
-                        <img src="" alt="QR Code">
-                    </div>
+                </div>
+                <div>
+                    <br>
+                    <h5>Click Count: {{url.click_count}}</h5>
+                    <br>
                 </div>
             </div>
             <br>
