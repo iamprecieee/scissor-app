@@ -49,8 +49,8 @@ def home():
 @login_required
 @limit("10 per minute")
 def dashboard():
-    urls = Url.query.all()
-    custom_urls = CustomUrl.query.all()
+    urls = Url.query.filter_by(user_id=current_user.id).all()
+    custom_urls = CustomUrl.query.filter_by(user_id=current_user.id).all()
     message = None
     message_type = None
     if 'message' in session:
@@ -191,9 +191,9 @@ def generate_qr(url_key):
 @views.route('/<url_key>/delete')
 @login_required
 def delete(url_key):
-    url = Url.query.filter_by(short_url=url_key).first()
+    url = Url.query.filter_by(short_url=url_key, user_id=current_user.id).first()
     if url is None:
-        url = CustomUrl.query.filter_by(custom_short_url=url_key).first()
+        url = CustomUrl.query.filter_by(custom_short_url=url_key, user_id=current_user.id).first()
     if url:
         db.session.delete(url)
         db.session.commit()
@@ -209,7 +209,7 @@ def delete(url_key):
 @login_required
 @limit("10 per minute")
 def update(url_key):
-    custom_url = CustomUrl.query.filter_by(custom_short_url=url_key).first()
+    custom_url = CustomUrl.query.filter_by(custom_short_url=url_key, user_id=current_user.id).first()
     host = request.host_url
     if custom_url:
         if request.method == 'POST':
