@@ -3,81 +3,23 @@
 {% block content%}
 {% if current_user.is_authenticated %}
     <br>
-    <h1 align="center" style="color:papayawhip">{% block header %}RECENT SHORT URLS{% endblock %}</h1>
-    <div id="urls">
-        {% for url in urls %}
-        <div class="transparent-box">
-            <div align="center" style="color: papayawhip;">
-                <a href="/dashboard{{url.user.email}}"></a>
-                <p><h5>Original URL: <a class="my-link" href="{{url.original_url}}" target="_blank">{{url.original_url}}</a></h5></p>
-                <p><h5>Shortened URL: <a class="my-link" href="http://{{ server_name }}/{{url.short_url}}" target="_blank">https://{{ server_name }}/{{url.short_url}}</a></h5></p>
-                <div>
-                    <button align="center" type="button" class="btn-qr" onclick="toggleQR('{{ url.short_url }}')">QR Code</button>
-                    <a href="{{ url_for('views.delete', url_key=url.short_url) }}"><button type="button" class="btn-delete">Delete</button></a>
-                </div>
-                <div id="qr_{{ url.short_url }}" style="display: none;">
-                    <br><p><img src="" alt="QR Code"></p>
-                </div>
-                    <p><h6>Created: {{url.date_created.strftime('%B %d, %Y')}} || Click Count: {{url.click_count}}</h6></p>
-            </div>
+    <br>
+    <br>
+        <div align="center" class="about-text" style="color:papayawhip">
+            <h1 align="center"><b>SHORTEN. SIMPLIFY. SHARE.</b></h1>
+            <br>
+            <p>
+                We believe in keeping things simple, so you can focus on what matters most.
+            </p>
+            <p>
+                Scissor is designed with simplicity in mind. Just paste your long URL, hit "SHORTEN", and watch the magic happen. No technical jargon or complicated setup required.
+            </p>
+            <p>
+                Unlock the power of concise sharing with Scissor. Make your links impactful, trackable, and effortlessly shareable. Shorten with Scissor and experience the difference.
+                <br>
+                <br>
+            </p>
         </div>
-        {% endfor %}
-    <br>
-    <h1 align="center" style="color:papayawhip">{% block header_custom_urls %}RECENT CUSTOM URLS{% endblock %}</h1>
-    <div id="custom_urls">
-        {% for url in custom_urls %}
-        <div class="transparent-box">
-            <div align="center" style="color: papayawhip;">
-                <a href="/dashboard{{url.user.email}}"></a>
-                <p><h5>Original URL: <a class="my-link" href="{{url.original_url}}" target="_blank">{{url.original_url}}</a></h5></p>
-                <p><h5>Custom Shortened URL: <a class="my-link" href="http://{{ server_name }}/{{url.custom_short_url}}" target="_blank">https://{{ server_name }}/{{url.custom_short_url}}</a></h5></p>
-                <div>
-                    <button align="center" type="button" class="btn-qr" onclick="toggleQR('{{ url.custom_short_url }}')">QR Code</button>
-                    <a href="{{ url_for('views.update', url_key=url.custom_short_url) }}"><button type="button" class="btn-edit">Edit</button></a>
-                    <a href="{{ url_for('views.delete', url_key=url.custom_short_url) }}"><button type="button" class="btn-delete">Delete</button></a>
-                </div>
-                <div id="qr_{{ url.custom_short_url }}" style="display: none;">
-                    <br><p><img src="" alt="QR Code"></p>
-                </div>
-                    <p><h6>Created: {{url.date_created.strftime('%B %d, %Y')}} || Click Count: {{url.click_count}}</h6></p>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-    <script>
-        function toggleQR(urlKey) {
-            var qrDiv = document.getElementById("qr_" + urlKey);
-            var qrImg = qrDiv.querySelector("img");
-
-            if (qrDiv.style.display === "none") {
-                // QR code is hidden, show it
-                qrImg.src = "/generate_qr/" + urlKey;
-                qrDiv.style.display = "block";
-            } else {
-                // QR code is visible, hide it
-                qrDiv.style.display = "none";
-            }
-        }
-    </script>
-    {% block footer %}
-    {% if current_user.is_authenticated %}
-    <br>
-    <div align="center">
-      <a href="/shortenurl">
-        <button type="button" class="btn-outline-custom">
-          SHORTEN URL
-        </button></a>
-    </div>
-    <br>
-    <div align="center">
-      <a href="/customurl"
-        ><button type="button" class="btn-outline-custom">
-          CUSTOM URL
-        </button></a>
-    </div>
-    <br>
-    {% endif %}
-    {% endblock %} 
 {% else %}
     <br>
     <br>
@@ -96,7 +38,7 @@
                 <br>
                 <br>
                 <br>
-                 <a href="/signup"><button type="button" class="btn-outline-custom"><b>JOIN SCISSOR NOW</b></button></a>               
+                <a href="/signup"><button type="button" class="btn-outline-custom"><b>JOIN SCISSOR NOW</b></button></a>               
                 <br>
             </p>
         </div>
