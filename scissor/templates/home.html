@@ -12,15 +12,14 @@
                 <p><h5>Original URL: <a class="my-link" href="{{url.original_url}}" target="_blank">{{url.original_url}}</a></h5></p>
                 <p><h5>Shortened URL: <a class="my-link" href="http://{{ server_name }}/{{url.short_url}}" target="_blank">https://{{ server_name }}/{{url.short_url}}</a></h5></p>
                 <div>
-                    <button align="center" type="button" class="btn btn-info btn-sm" onclick="toggleQR('{{ url.short_url }}')">QR Code</button>
-                    <a href="{{ url_for('views.delete', url_key=url.short_url) }}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+                    <button align="center" type="button" class="btn-qr" onclick="toggleQR('{{ url.short_url }}')">QR Code</button>
+                    <a href="{{ url_for('views.delete', url_key=url.short_url) }}"><button type="button" class="btn-delete">Delete</button></a>
                 </div>
                 <div id="qr_{{ url.short_url }}" style="display: none;">
-                    <p><img src="" alt="QR Code"></p>
+                    <br><p><img src="" alt="QR Code"></p>
                 </div>
-                    <p><h5>Created: {{url.date_created.strftime('%B %d, %Y')}} || Click Count: {{url.click_count}}</h5></p>
+                    <p><h6>Created: {{url.date_created.strftime('%B %d, %Y')}} || Click Count: {{url.click_count}}</h6></p>
             </div>
-            <br>
         </div>
         {% endfor %}
     <br>
@@ -33,16 +32,15 @@
                 <p><h5>Original URL: <a class="my-link" href="{{url.original_url}}" target="_blank">{{url.original_url}}</a></h5></p>
                 <p><h5>Custom Shortened URL: <a class="my-link" href="http://{{ server_name }}/{{url.custom_short_url}}" target="_blank">https://{{ server_name }}/{{url.custom_short_url}}</a></h5></p>
                 <div>
-                    <button align="center" type="button" class="btn btn-info btn-sm" onclick="toggleQR('{{ url.custom_short_url }}')">QR Code</button>
-                    <a href="{{ url_for('views.update', url_key=url.custom_short_url) }}"><button type="button" class="btn btn-warning btn-sm">Edit</button></a>
-                    <a href="{{ url_for('views.delete', url_key=url.custom_short_url) }}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+                    <button align="center" type="button" class="btn-qr" onclick="toggleQR('{{ url.custom_short_url }}')">QR Code</button>
+                    <a href="{{ url_for('views.update', url_key=url.custom_short_url) }}"><button type="button" class="btn-edit">Edit</button></a>
+                    <a href="{{ url_for('views.delete', url_key=url.custom_short_url) }}"><button type="button" class="btn-delete">Delete</button></a>
                 </div>
                 <div id="qr_{{ url.custom_short_url }}" style="display: none;">
-                    <p><img src="" alt="QR Code"></p>
+                    <br><p><img src="" alt="QR Code"></p>
                 </div>
-                    <p><h5>Created: {{url.date_created.strftime('%B %d, %Y')}} || Click Count: {{url.click_count}}</h5></p>
+                    <p><h6>Created: {{url.date_created.strftime('%B %d, %Y')}} || Click Count: {{url.click_count}}</h6></p>
             </div>
-            <br>
         </div>
         {% endfor %}
     </div>
