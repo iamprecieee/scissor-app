@@ -81,7 +81,7 @@ def shortenurl():
                 return render_template("shortenurl.html", message=message, message_type=message_type)
             else:
                 short_url = generate_short_url()
-                existing_url = Url.query.filter_by(original_url=original_url).first()
+                existing_url = Url.query.filter_by(original_url=original_url, user_id=current_user.id).first()
                 if existing_url is not None:
                     session['message'] = 'URL already exists!'
                     session['message_type'] = 'error'
@@ -120,8 +120,10 @@ def customurl():
                 return render_template("customurl.html", message=message, message_type=message_type)
             
             custom_short_url = text2
-            existing_url = CustomUrl.query.filter_by(original_url=original_url).first()
-            existing_custom_short_url = CustomUrl.query.filter_by(custom_short_url=custom_short_url).first()
+            existing_url = CustomUrl.query.filter_by(original_url=original_url, user_id=current_user.id).first()
+            existing_custom_short_url = CustomUrl.query.filter_by(custom_short_url=custom_short_url, user_id=current_user.id).first()
+
+            existing_short_url = Url.query.filter_by(short_url=custom_short_url, user_id=current_user.id).first()
            
             if existing_url is not None:
                 session['message'] = 'URL already exists!'
@@ -132,6 +134,13 @@ def customurl():
     
             elif existing_custom_short_url is not None:
                 session['message'] = 'Custom short URL already in use!'
+                session['message_type'] = 'error'
+                message = session.pop('message')
+                message_type = session.pop('message_type')
+                return render_template("customurl.html", message=message, message_type=message_type)
+
+            elif existing_short_url is not None:
+                session['message'] = 'URL already exists!'
                 session['message_type'] = 'error'
                 message = session.pop('message')
                 message_type = session.pop('message_type')
@@ -157,6 +166,9 @@ def redirection(url_key):
         db.session.commit()
         return redirect(url.original_url)
     else:
+        if url_key != 'home':
+            session['message'] = 'Invalid URL!'
+            session['message_type'] = 'error'
         return redirect(url_for('views.dashboard'))
 
 @views.route('/generate_qr/<url_key>')
