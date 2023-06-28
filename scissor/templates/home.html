@@ -3,73 +3,44 @@
 {% block content%}
 {% if current_user.is_authenticated %}
     <br>
-    <h1 align="center" style="color:#ffffff">{% block header %}RECENT SHORT URLS{% endblock %}</h1>
+    <h1 align="center" style="color:papayawhip">{% block header %}RECENT SHORT URLS{% endblock %}</h1>
     <div id="urls">
         {% for url in urls %}
-        <div style="background-color:rgb(248, 250, 251)" class="card border-dark">
-            <br>
-            <div style="background-color:rgb(72, 171, 243); color: rgb(255, 255, 255);" class="card justify-content-between align-items-center border-dark">
+        <div class="transparent-box">
+            <div align="center" style="color: papayawhip;">
                 <a href="/dashboard{{url.user.email}}"></a>
-                <div>
-                    <br>
-                    <h5>Original URL: <a href="{{url.original_url}}" target="_blank">{{url.original_url}}</a></h5>
-                </div>
-                <br>
-                <div>
-                    <h5>Shortened URL: <a href="http://{{ server_name }}/{{url.short_url}}" target="_blank">https://{{ server_name }}/{{url.short_url}}</a></h5>
-                </div>
+                <p><h5>Original URL: <a class="my-link" href="{{url.original_url}}" target="_blank">{{url.original_url}}</a></h5></p>
+                <p><h5>Shortened URL: <a class="my-link" href="http://{{ server_name }}/{{url.short_url}}" target="_blank">https://{{ server_name }}/{{url.short_url}}</a></h5></p>
                 <div>
                     <button align="center" type="button" class="btn btn-info btn-sm" onclick="toggleQR('{{ url.short_url }}')">QR Code</button>
                     <a href="{{ url_for('views.delete', url_key=url.short_url) }}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
                 </div>
                 <div id="qr_{{ url.short_url }}" style="display: none;">
-                    <br>
-                    <img src="" alt="QR Code">
-                    <br>
+                    <p><img src="" alt="QR Code"></p>
                 </div>
-                <div>
-                    <br>
-                    <h5>Created: {{url.date_created.strftime('%B %d, %Y')}} || Click Count: {{url.click_count}}</h5>
-                    <br>
-                </div>
+                    <p><h5>Created: {{url.date_created.strftime('%B %d, %Y')}} || Click Count: {{url.click_count}}</h5></p>
             </div>
             <br>
         </div>
         {% endfor %}
-    </div>
     <br>
-
-    <br>
-    <h1 align="center" style="color:#ffffff">{% block header_custom_urls %}RECENT CUSTOM URLS{% endblock %}</h1>
+    <h1 align="center" style="color:papayawhip">{% block header_custom_urls %}RECENT CUSTOM URLS{% endblock %}</h1>
     <div id="custom_urls">
         {% for url in custom_urls %}
-        <div style="background-color:rgb(248, 250, 251)" class="card border-dark">
-            <br>
-            <div style="background-color:rgb(72, 171, 243); color: rgb(255, 255, 255);" class="card justify-content-between align-items-center border-dark">
+        <div class="transparent-box">
+            <div align="center" style="color: papayawhip;">
                 <a href="/dashboard{{url.user.email}}"></a>
-                <div>
-                    <br>
-                    <h5>Original URL: <a href="{{url.original_url}}" target="_blank">{{url.original_url}}</a></h5>
-                </div>
-                <br>
-                <div>
-                    <h5>Custom Shortened URL: <a href="http://{{ server_name }}/{{url.custom_short_url}}" target="_blank">https://{{ server_name }}/{{url.custom_short_url}}</a></h5>
-                </div>
+                <p><h5>Original URL: <a class="my-link" href="{{url.original_url}}" target="_blank">{{url.original_url}}</a></h5></p>
+                <p><h5>Custom Shortened URL: <a class="my-link" href="http://{{ server_name }}/{{url.custom_short_url}}" target="_blank">https://{{ server_name }}/{{url.custom_short_url}}</a></h5></p>
                 <div>
                     <button align="center" type="button" class="btn btn-info btn-sm" onclick="toggleQR('{{ url.custom_short_url }}')">QR Code</button>
                     <a href="{{ url_for('views.update', url_key=url.custom_short_url) }}"><button type="button" class="btn btn-warning btn-sm">Edit</button></a>
                     <a href="{{ url_for('views.delete', url_key=url.custom_short_url) }}"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
                 </div>
                 <div id="qr_{{ url.custom_short_url }}" style="display: none;">
-                    <br>
-                    <img src="" alt="QR Code">
-                    <br>
+                    <p><img src="" alt="QR Code"></p>
                 </div>
-                <div>
-                    <br>
-                    <h5>Created: {{url.date_created.strftime('%B %d, %Y')}} || Click Count: {{url.click_count}}</h5>
-                    <br>
-                </div>
+                    <p><h5>Created: {{url.date_created.strftime('%B %d, %Y')}} || Click Count: {{url.click_count}}</h5></p>
             </div>
             <br>
         </div>
@@ -95,14 +66,14 @@
     <br>
     <div align="center">
       <a href="/shortenurl">
-        <button type="button" class="btn btn-primary btn-lg">
+        <button type="button" class="btn-outline-custom">
           SHORTEN URL
         </button></a>
     </div>
     <br>
     <div align="center">
       <a href="/customurl"
-        ><button type="button" class="btn btn-primary btn-lg">
+        ><button type="button" class="btn-outline-custom">
           CUSTOM URL
         </button></a>
     </div>
@@ -113,8 +84,8 @@
     <br>
     <br>
     <br>
-        <div align="center" class="about-text" style="color:#ffffff">
-            <h1 align="center">SHORTEN. SIMPLIFY. SHARE.</h1>
+        <div align="center" class="about-text" style="color:papayawhip">
+            <h1 align="center"><b>SHORTEN. SIMPLIFY. SHARE.</b></h1>
             <br>
             <p>
                 We believe in keeping things simple, so you can focus on what matters most.
@@ -127,7 +98,7 @@
                 <br>
                 <br>
                 <br>
-                <a href="/signup"><button type="button" class="btn btn-warning btn-lg">JOIN SCISSOR NOW</button></a>                
+                 <a href="/signup"><button type="button" class="btn-outline-custom"><b>JOIN SCISSOR NOW</b></button></a>               
                 <br>
             </p>
         </div>
