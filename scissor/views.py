@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app as app, send_file
+from flask import Blueprint, render_template, request, session, redirect, url_for, current_app as app, send_file
 from flask_login import login_required, current_user
 from .models import Url, CustomUrl
 from . import db
@@ -38,10 +38,26 @@ def validate_url(url):
 @views.route("/")
 @views.route("/home")
 def home():
-    print("Home function triggered")
+    message = None
+    message_type = None
+    if 'message' in session:
+        message = session.pop('message')
+        message_type = session.pop('message_type')
+    return render_template("home.html", message=message, message_type=message_type)
+
+@views.route("/dashboard")
+@login_required
+@limit("10 per minute")
+def dashboard():
     urls = Url.query.all()
     custom_urls = CustomUrl.query.all()
-    return render_template("home.html", user = current_user, urls = urls, custom_urls=custom_urls, server_name=app.config['SERVER_NAME'])
+    message = None
+    message_type = None
+    if 'message' in session:
+        message = session.pop('message')
+        message_type = session.pop('message_type')
+    return render_template("dashboard.html", user = current_user, urls = urls, custom_urls=custom_urls, server_name=app.config['SERVER_NAME'], message=message, message_type=message_type)
+
 
 @views.route("/shortenurl", methods=['GET', 'POST'])
 @login_required
@@ -50,24 +66,35 @@ def shortenurl():
     if request.method == "POST":
         text = request.form.get('text')
         if not text:
-            logger.error('Text cannot be empty')
+            session['message'] = 'Text cannot be empty!'
+            session['message_type'] = 'error'
+            message = session.pop('message')
+            message_type = session.pop('message_type')
+            return render_template("shortenurl.html", message=message, message_type=message_type)
         else:
             original_url = text
             if not validate_url(original_url):
-                logger.error('Invalid URL')
-                return render_template("shortenurl.html")
+                session['message'] = 'Invalid URL!'
+                session['message_type'] = 'error'
+                message = session.pop('message')
+                message_type = session.pop('message_type')
+                return render_template("shortenurl.html", message=message, message_type=message_type)
             else:
                 short_url = generate_short_url()
                 existing_url = Url.query.filter_by(original_url=original_url).first()
                 if existing_url is not None:
-                    logger.error('URL already exists!')
-                    return render_template("shortenurl.html")
+                    session['message'] = 'URL already exists!'
+                    session['message_type'] = 'error'
+                    message = session.pop('message')
+                    message_type = session.pop('message_type')
+                    return render_template("shortenurl.html", message=message, message_type=message_type)
                 else:
                     new_url = Url(original_url=original_url, short_url=short_url, user_id=current_user.id)
                     db.session.add(new_url)
                     db.session.commit()
-                    logger.info('Post created!')
-                    return redirect(url_for('views.home'))
+                    session['message'] = 'Post created!'
+                    session['message_type'] = 'success'
+                    return redirect(url_for('views.dashboard'))
     return render_template("shortenurl.html")
 
 @views.route("/customurl", methods=['GET', 'POST'])
@@ -78,23 +105,45 @@ def customurl():
         text = request.form.get('text')
         text2 = request.form.get('text2')
         if not text or not text2:
-            logger.error('Text fields cannot be empty')
+            session['message'] = 'Text cannot be empty!'
+            session['message_type'] = 'error'
+            message = session.pop('message')
+            message_type = session.pop('message_type')
+            return render_template("customurl.html", message=message, message_type=message_type)
         else:
             original_url = text
             if not validate_url(original_url):
-                logger.error('Invalid URL')
-                return render_template("customurl.html")
+                session['message'] = 'Invalid URL!'
+                session['message_type'] = 'error'
+                message = session.pop('message')
+                message_type = session.pop('message_type')
+                return render_template("customurl.html", message=message, message_type=message_type)
+            
             custom_short_url = text2
             existing_url = CustomUrl.query.filter_by(original_url=original_url).first()
+            existing_custom_short_url = CustomUrl.query.filter_by(custom_short_url=custom_short_url).first()
+           
             if existing_url is not None:
-                logger.error('URL already exists!')
-                return render_template("customurl.html")
+                session['message'] = 'URL already exists!'
+                session['message_type'] = 'error'
+                message = session.pop('message')
+                message_type = session.pop('message_type')
+                return render_template("customurl.html", message=message, message_type=message_type)
+    
+            elif existing_custom_short_url is not None:
+                session['message'] = 'Custom short URL already in use!'
+                session['message_type'] = 'error'
+                message = session.pop('message')
+                message_type = session.pop('message_type')
+                return render_template("customurl.html", message=message, message_type=message_type)
+
             else:
                 new_url = CustomUrl(original_url=original_url, custom_short_url=custom_short_url, user_id=current_user.id)
                 db.session.add(new_url)
                 db.session.commit()
-                logger.info('Post created!')
-                return redirect(url_for('views.home'))
+                session['message'] = 'Post created!'
+                session['message_type'] = 'success'
+                return redirect(url_for('views.dashboard'))
     return render_template("customurl.html")
 
 @views.route('/<url_key>')
@@ -108,8 +157,9 @@ def redirection(url_key):
         db.session.commit()
         return redirect(url.original_url)
     else:
-        flash('Invalid URL', category='error')
-        return redirect(url_for('views.home'))
+        session['message'] = 'Invalid URL!'
+        session['message_type'] = 'error'
+        return redirect(url_for('views.dashboard'))
 
 @views.route('/generate_qr/<url_key>')
 @login_required
@@ -120,8 +170,9 @@ def generate_qr(url_key):
     if url is None:
         url = CustomUrl.query.filter_by(custom_short_url=url_key).first()
     if not url or url.user_id != current_user.id:
-        flash('Invalid URL', category='error')
-        return redirect(url_for('views.home'))
+        session['message'] = 'Invalid URL!'
+        session['message_type'] = 'error'
+        return redirect(url_for('views.dashboard'))
     qr = qrcode.QRCode(
         version=2,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -146,9 +197,12 @@ def delete(url_key):
     if url:
         db.session.delete(url)
         db.session.commit()
-        return redirect(url_for('views.home'))
-    flash('Invalid URL', category='error')
-    return redirect(url_for('views.home'))
+        session['message'] = 'Post deleted!'
+        session['message_type'] = 'success'
+        return redirect(url_for('views.dashboard'))
+    session['message'] = 'Invalid URL!'
+    session['message_type'] = 'error'
+    return redirect(url_for('views.dashboard'))
 
 
 @views.route('/<url_key>/edit', methods=['GET', 'POST'])
@@ -163,10 +217,14 @@ def update(url_key):
             if custom_path:
                 link_exists = CustomUrl.query.filter_by(custom_short_url=custom_path).first()
                 if link_exists:
-                    flash('That custom path already exists. Please try another.')
+                    session['message'] = 'That custom path already exists.'
+                    session['message_type'] = 'error'
                     return redirect(url_for('views.update', url_key=url_key))
                 custom_url.custom_short_url = custom_path
                 db.session.commit()
-                return redirect(url_for('views.home'))
+                session['message'] = 'Post updated!'
+                session['message_type'] = 'success'
+                return redirect(url_for('views.dashboard'))
         return render_template('edit.html', url=custom_url, host=host)
-    return render_template('home.html')
+    return render_template('dashboard.html')
+
