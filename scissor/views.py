@@ -157,8 +157,6 @@ def redirection(url_key):
         db.session.commit()
         return redirect(url.original_url)
     else:
-        session['message'] = 'Invalid URL!'
-        session['message_type'] = 'error'
         return redirect(url_for('views.dashboard'))
 
 @views.route('/generate_qr/<url_key>')
