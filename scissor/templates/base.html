@@ -14,20 +14,20 @@
     <div class="collapse" id="navbarToggleExternalContent">
         <div class="bg-dark p-4">
             {% if current_user.is_authenticated %}
-            <h4><a class="nav-item nav-link text-white h4" align="center" href="/shortenurl">SHORTEN URL</a></h4>
+            <h4><a class="nav-item nav-link h6" style="color: #4bb4ff" align="center" href="/shortenurl">SHORTEN URL</a></h4>
             <br>
-            <h4><a class="nav-item nav-link text-white h4" align="center" href="/customurl">CUSTOM URL</a></h4>
+            <h4><a class="nav-item nav-link h6" style="color: #4bb4ff" align="center" href="/customurl">CUSTOM URL</a></h4>
             <br>
-            <h4><a class="nav-item nav-link text-warning h4" align="center" href="/logout">LOGOUT</a></h4>
+            <h4><a class="nav-item nav-link h6" style="color: rgba(255, 85, 85, 0.971);" align="center" href="/logout">LOGOUT</a></h4>
             <br>
             {% else %}
-            <h4><a class="nav-item nav-link text-warning h4" align="center" href="/login">LOGIN</a></h4>
+            <h4><a class="nav-item nav-link h6" style="color: #4bb4ff;" align="center" href="/login">LOGIN</a></h4>
             {% endif %}
         </div>
       </div>
       <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"><h4>SCISSOR</h4></a>
+            <a class="navbar-brand" href="#" style="color:#4bb4ff"><h3>SCISSOR</h3></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -82,12 +82,12 @@
             }
         };
     </script>
-    <!-- include jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <!-- script to fade out alerts -->
-    <script type="text/javascript">
-        $(document).ready(function(){window.setTimeout(function() {$(".alert").fadeTo(500, 0).slideUp(500, function(){$(this).remove();});}, 3000);});
-    </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<!-- include jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- script to fade out alerts -->
+<script type="text/javascript">
+    $(document).ready(function(){window.setTimeout(function() {$(".alert").fadeTo(500, 0).slideUp(500, function(){$(this).remove();});}, 3000);});
+</script>
 </body>
 </html>
