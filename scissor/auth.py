@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash, current_app as app
+from flask import Blueprint, render_template, redirect, url_for, request, flash, session, current_app as app
 from . import db
 from .models import User
 from flask_login import login_user, logout_user, login_required
@@ -27,10 +27,15 @@ def login():
         user = User.query.filter((User.email==identifier )| (User.username==identifier)).first()
         if user and check_password_hash(user.password, password):
             login_user(user, remember=True)
-            flash(f"Good to have you back {user.username}", category='success')
-            return redirect(url_for('views.home'))
+            session['message'] = f"Good to have you back {user.username}!"
+            session['message_type'] = 'success'
+            return redirect(url_for("views.dashboard"))
         else:
-            flash('Email/Username does not exist.', category='error')
+            session['message'] = 'Invalid Credentials!'
+            session['message_type'] = 'error'
+            message = session.pop('message')
+            message_type = session.pop('message_type')
+            return render_template("login.html", message=message, message_type=message_type)
     return render_template("login.html")
 
 @auth.route("/signup", methods=['GET', 'POST'])
@@ -43,25 +48,32 @@ def sign_up():
         password2 = request.form.get("password2")
         email_exists = User.query.filter_by(email=email).first()
         if email_exists:
-            flash('Email already exists!', category='error')
+            session['message'] = 'Email already exists!'
+            session['message_type'] = 'error'
         elif password1 != password2:
-            flash('Password does not match.', category='error')
+            session['message'] = 'Password does not match!'
+            session['message_type'] = 'error'
         elif len(password1) < 8:
-            flash('Password is too short.', category='error')
+            session['message'] = 'Password is too short!'
+            session['message_type'] = 'error'
         elif len(email) < 5:
-            flash('Invalid email.', category='error')
+            session['message'] = 'Invalid email!'
+            session['message_type'] = 'error'
         else:
             new_user = User(username=username, email=email, password=generate_password_hash(password1, method='pbkdf2:sha256'))
             db.session.add(new_user)
             db.session.commit()
-            flash('Account created!')
+            session['message'] = 'Account created!'
+            session['message_type'] = 'success'
             login_user(new_user, remember=True)
-            return redirect(url_for("views.home"))
+            return redirect(url_for("views.dashboard"))
     return render_template("signup.html")
 
 @auth.route("/logout")
 @login_required
 def logout():
     logout_user()
-    flash('Logged out successfully!', category='success')
+    session['message'] = 'Logged out successfully!'
+    session['message_type'] = 'success'
     return redirect(url_for("views.home"))
+
