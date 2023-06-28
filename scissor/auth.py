@@ -19,7 +19,7 @@ def limit(key):
     return decorator
 
 @auth.route("/login", methods=['GET', 'POST'])
-@limit("10 per minute")
+@limit("100 per minute")
 def login():
     if request.method == 'POST':
         identifier = request.form.get("identifier")
@@ -39,7 +39,7 @@ def login():
     return render_template("login.html")
 
 @auth.route("/signup", methods=['GET', 'POST'])
-@limit("10 per minute")
+@limit("100 per minute")
 def sign_up():
     if request.method == 'POST':
         username = request.form.get("username")
