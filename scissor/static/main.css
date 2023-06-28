@@ -1,0 +1,74 @@
+.btn-outline-custom {
+    border: 2px solid rgb(84, 245, 69);
+    color: rgb(84, 245, 69);
+    background-color: transparent;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 15px;  
+    transition: all 0.5s;
+}
+
+.btn-outline-custom:hover {
+    color: purple;
+    background-color: rgb(69, 212, 56);
+    border-color: rgb(69, 212, 56);
+}
+
+
+.btn-outline {
+    border: 2px solid rgb(246, 217, 34);
+    color: rgb(246, 217, 34);
+    background-color: transparent;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 15px;  
+    transition: all 0.5s;
+}
+
+.btn-outline:hover {
+    color: purple;
+    background-color: rgb(246, 217, 34);
+    border-color: rgb(246, 217, 34);
+}
+
+
+.btn-box, .btn-box:focus {
+    border: 1px solid papayawhip;
+    color: papayawhip;
+    background: transparent;
+    outline: none;
+}
+
+.btn-box:-webkit-autofill,
+.btn-box:-webkit-autofill:hover, 
+.btn-box:-webkit-autofill:focus {
+    border: 1px solid papayawhip !important;
+    color: papayawhip !important;
+    background: transparent !important;
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: 0 0 0px 1000px transparent;
+}
+
+.btn-box::-webkit-input-placeholder {
+    color: rgba(255, 239, 213, 0.285);
+}
+
+.my-link {
+    color: rgb(246, 217, 34);
+}
+.my-link:hover {
+    color: rgb(69, 212, 56);
+}
+
+
+.transparent-box {
+    background: rgba(255, 255, 255, 0); 
+    border: 2px solid white; 
+    border-radius: 10px; 
+}
