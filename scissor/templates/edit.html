@@ -3,31 +3,31 @@
 {% block content %}
 <form action="{{url_for('views.update', url_key=url.custom_short_url)}}" method="POST" class="form-container">
     <br>
-    <h1 align="center" style="color:#ffffff">SHORTEN URL</h1>
+    <h1 align="center" style="color:papayawhip">SHORTEN URL</h1>
     <form method="POST">
         <br>
-            <div><h5 style="color:#ffffff">original_url:</h5>
-                <input type="text" name="original_url" class="form-control" value="{{ url.original_url }}"></input>
+            <div><h5 style="color:papayawhip"><b>original_url:</b></h5>
+                <input type="text" name="original_url" class="form-control btn-box" value="{{ url.original_url }}"></input>
             </div>
         <br />
         <br>
-            <div><h5 style="color:#ffffff">old_shortened_url:</h5>
-                <input type="text" name="custom_short_url" class="form-control" value="{{ host }}{{ url.custom_short_url }}" ></input>
+            <div><h5 style="color:papayawhip"><b>old_shortened_url:</b></h5>
+                <input type="text" name="custom_short_url" class="form-control btn-box" value="{{ host }}{{ url.custom_short_url }}" ></input>
             </div>
         <br />
         <br>
-            <div><h5 style="color:#ffffff">new_shortened_url:</h5>
-                <input type="text" class="form-control" placeholder="{{ url.custom_short_url }}" name="custom_path" required></input>
+            <div><h5 style="color:papayawhip"><b>new_shortened_url:</b></h5>
+                <input type="text" class="form-control btn-box" placeholder="{{ url.custom_short_url }}" name="custom_path" required></input>
             </div>
         <br />
         <br>
             <div align="center">
-                <button type="submit" class="btn btn-lg btn-primary">UPDATE</button>
+                <button type="submit" class="btn-outline-custom">UPDATE</button>
             </div>
         <br />
     </form>
     <br />
 <div align="center">
-    <a href="/home"><button type="button" class="btn btn-warning">CANCEL</button></a>
+    <a href="/home"><button type="button" class="btn-outline">CANCEL</button></a>
 </div>
 {% endblock content %}
