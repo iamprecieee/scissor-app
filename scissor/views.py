@@ -166,9 +166,6 @@ def redirection(url_key):
         db.session.commit()
         return redirect(url.original_url)
     else:
-        if url_key != 'home' and url_key != 'dashboard' and url_key != 'signup' and url_key != 'login' and url_key != 'edit' and url_key != 'shortenurl' and url_key != 'customurl':
-            session['message'] = 'Invalid URL!'
-            session['message_type'] = 'error'
         return redirect(url_for('views.dashboard'))
 
 @views.route('/generate_qr/<url_key>')
