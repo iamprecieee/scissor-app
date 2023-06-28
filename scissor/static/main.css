@@ -17,7 +17,6 @@
     border-color: rgb(69, 212, 56);
 }
 
-
 .btn-outline {
     border: 2px solid rgb(246, 217, 34);
     color: rgb(246, 217, 34);
@@ -36,7 +35,6 @@
     background-color: rgb(246, 217, 34);
     border-color: rgb(246, 217, 34);
 }
-
 
 .btn-box, .btn-box:focus {
     border: 1px solid papayawhip;
@@ -62,17 +60,16 @@
 .my-link {
     color: rgb(246, 217, 34);
 }
+
 .my-link:hover {
     color: rgb(69, 212, 56);
 }
-
 
 .transparent-box {
     background: rgba(255, 255, 255, 0); 
     border: 2px solid rgb(69, 212, 56); 
     border-radius: 10px; 
 }
-
 
 .btn-edit {
     border: solid rgb(246, 217, 34);
@@ -123,4 +120,19 @@
     color: purple;
     background-color: #3daeff;
     border-color: #3daeff;
+}
+
+.small-modal .modal-dialog {
+    max-width: 300px;
+    margin: 5px auto;
+}
+
+.modal-content {
+    border: solid rgb(246, 217, 34);
+    background-color: transparent;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 5px;
+    padding: 5px;
 }
