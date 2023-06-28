@@ -69,6 +69,58 @@
 
 .transparent-box {
     background: rgba(255, 255, 255, 0); 
-    border: 2px solid white; 
+    border: 2px solid rgb(69, 212, 56); 
     border-radius: 10px; 
+}
+
+
+.btn-edit {
+    border: solid rgb(246, 217, 34);
+    color: rgb(246, 217, 34);
+    background-color: transparent;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 5px;  
+    transition: all 0.5s;
+}
+
+.btn-edit:hover {
+    color: purple;
+    background-color: rgb(246, 217, 34);
+    border-color: rgb(246, 217, 34);
+}
+
+.btn-delete {
+    border: solid rgba(255, 85, 85, 0.971);
+    color: rgba(255, 85, 85, 0.971);
+    background-color: transparent;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 5px;  
+    transition: all 0.5s;
+}
+
+.btn-delete:hover {
+    color: purple;
+    background-color: rgba(235, 65, 65, 0.971);
+    border-color: rgba(235, 65, 65, 0.971);
+}
+
+.btn-qr {
+    border: solid #4bb4ff;
+    color: #4bb4ff;
+    background-color: transparent;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 5px;  
+    transition: all 0.5s;
+}
+
+.btn-qr:hover {
+    color: purple;
+    background-color: #3daeff;
+    border-color: #3daeff;
 }
