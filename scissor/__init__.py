@@ -5,19 +5,25 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_caching import Cache
 from flask_migrate import Migrate
+from itsdangerous import URLSafeTimedSerializer
+from flask_mail import Mail 
 
 from .config import Config
 
 db = SQLAlchemy()
 migrate = Migrate()
-
+mail = Mail()
 
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
+    # This is for generating tokens
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    app.serializer = serializer
 
     db.init_app(app)
     migrate.init_app(app, db)
+    mail.init_app(app)
     
     cache = Cache(app, config={
         'CACHE_TYPE': app.config['CACHE_TYPE'], 
