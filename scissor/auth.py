@@ -77,7 +77,12 @@ def sign_up():
             session['message_type'] = 'success'
             login_user(new_user, remember=True)
             return redirect(url_for("views.dashboard"))
-    return render_template("signup.html")
+    message = None
+    message_type = None
+    if 'message' in session:
+        message = session.pop('message')
+        message_type = session.pop('message_type')
+    return render_template("signup.html", message=message, message_type=message_type)
 
 @auth.route("/logout")
 @login_required
