@@ -128,7 +128,13 @@ def customurl():
                 message = session.pop('message')
                 message_type = session.pop('message_type')
                 return render_template("customurl.html", message=message, message_type=message_type)
-            elif existing_custom_short_url is not None or existing_short_url is not None:
+            elif existing_custom_short_url is not None:
+                session['message'] = 'Custom short URL already in use!'
+                session['message_type'] = 'error'
+                message = session.pop('message')
+                message_type = session.pop('message_type')
+                return render_template("customurl.html", message=message, message_type=message_type)
+            elif existing_short_url is not None:
                 session['message'] = 'Short URL already in use!'
                 session['message_type'] = 'error'
                 message = session.pop('message')
@@ -212,8 +218,13 @@ def update(url_key):
             custom_path = request.form['custom_path']
             if custom_path:
                 link_exists = CustomUrl.query.filter_by(custom_short_url=custom_path).first()
+                link2_exists = Url.query.filter_by(short_url=custom_path).first()
                 if link_exists:
                     session['message'] = 'That custom path already exists.'
+                    session['message_type'] = 'error'
+                    return redirect(url_for('views.update', url_key=url_key))
+                elif link2_exists:
+                    session['message'] = 'That short path already exists.'
                     session['message_type'] = 'error'
                     return redirect(url_for('views.update', url_key=url_key))
                 custom_url.custom_short_url = custom_path
