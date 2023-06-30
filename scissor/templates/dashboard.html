@@ -17,7 +17,7 @@
                 <div id="qr_{{ url.short_url }}" style="display: none;">
                     <br><p><img src="" alt="QR Code"></p>
                 </div>
-                    <p><h6>Created: {{url.date_created.strftime('%B %d, %Y')}} || Click Count: {{url.click_count}}</h6></p>
+                    <p><h6>Created: {{url.date_created.strftime('%B %d, %Y')}}</h6></p>
             </div>
         </div>
         {% endfor %}
@@ -38,7 +38,7 @@
                 <div id="qr_{{ url.custom_short_url }}" style="display: none;">
                     <br><p><img src="" alt="QR Code"></p>
                 </div>
-                    <p><h6>Created: {{url.date_created.strftime('%B %d, %Y')}} || Click Count: {{url.click_count}}</h6></p>
+                    <p><h6>Created: {{url.date_created.strftime('%B %d, %Y')}}</h6></p>
             </div>
         </div>
         {% endfor %}
