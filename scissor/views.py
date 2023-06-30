@@ -37,6 +37,7 @@ def validate_url(url):
 
 @views.route("/")
 @views.route("/home")
+@limit("20 per minute")
 def home():
     message = None
     message_type = None
@@ -47,7 +48,7 @@ def home():
 
 @views.route("/dashboard")
 @login_required
-@limit("100 per minute")
+@limit("10 per minute")
 def dashboard():
     urls = Url.query.filter_by(user_id=current_user.id).all()
     custom_urls = CustomUrl.query.filter_by(user_id=current_user.id).all()
@@ -61,7 +62,7 @@ def dashboard():
 
 @views.route("/shortenurl", methods=['GET', 'POST'])
 @login_required
-@limit("100 per minute")
+@limit("10 per minute")
 def shortenurl():
     if request.method == "POST":
         text = request.form.get('text')
@@ -99,7 +100,7 @@ def shortenurl():
 
 @views.route("/customurl", methods=['GET', 'POST'])
 @login_required
-@limit("100 per minute")
+@limit("10 per minute")
 def customurl():
     if request.method == "POST":
         text = request.form.get('text')
@@ -156,7 +157,7 @@ def customurl():
     return render_template("customurl.html")
 
 @views.route('/<url_key>')
-@limit("100 per minute")
+@limit("10 per minute")
 def redirection(url_key):
     url = Url.query.filter_by(short_url=url_key).first()
     if url is None:  # If no short_url is found, try to find a custom_short_url
@@ -170,7 +171,7 @@ def redirection(url_key):
 
 @views.route('/generate_qr/<url_key>')
 @login_required
-@limit("100 per minute")
+@limit("10 per minute")
 def generate_qr(url_key):
     """ Generates QR code """
     url = Url.query.filter_by(short_url=url_key).first()
@@ -197,6 +198,7 @@ def generate_qr(url_key):
 
 @views.route('/<url_key>/delete')
 @login_required
+@limit("10 per minute")
 def delete(url_key):
     url = Url.query.filter_by(short_url=url_key, user_id=current_user.id).first()
     if url is None:
@@ -214,7 +216,7 @@ def delete(url_key):
 
 @views.route('/<url_key>/edit', methods=['GET', 'POST'])
 @login_required
-@limit("100 per minute")
+@limit("10 per minute")
 def update(url_key):
     custom_url = CustomUrl.query.filter_by(custom_short_url=url_key, user_id=current_user.id).first()
     host = request.host_url
@@ -234,4 +236,27 @@ def update(url_key):
                 return redirect(url_for('views.dashboard'))
         return render_template('edit.html', url=custom_url, host=host)
     return render_template('dashboard.html')
+
+@views.route("/analytics_data")
+@login_required
+@limit("10 per minute")
+def analytics_data():
+    # Get the URLs for the current user
+    urls = Url.query.filter_by(user_id=current_user.id).all()
+    custom_urls = CustomUrl.query.filter_by(user_id=current_user.id).all()
+
+    # Prepare the data
+    data = {
+        "labels": [url.short_url for url in urls] + [c_url.custom_short_url for c_url in custom_urls],
+        "click_counts": [url.click_count for url in urls] + [c_url.click_count for c_url in custom_urls]
+    }
+
+    return jsonify(data)
+
+
+@views.route("/analytics")
+@login_required
+@limit("10 per minute")
+def analytics():
+    return render_template("analytics.html")
 
