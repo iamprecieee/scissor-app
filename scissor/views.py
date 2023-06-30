@@ -214,9 +214,7 @@ def update(url_key):
     custom_url = CustomUrl.query.filter_by(custom_short_url=url_key, user_id=current_user.id).first()
     host = request.host_url
     if custom_url:
-        message = None
-        message_type = None
-        if request.method == 'POST' and 'message' in session:
+        if request.method == 'POST':
             custom_path = request.form['custom_path']
             if custom_path:
                 link_exists = CustomUrl.query.filter_by(custom_short_url=custom_path).first()
@@ -234,10 +232,7 @@ def update(url_key):
                 session['message'] = 'Post updated!'
                 session['message_type'] = 'success'
                 return redirect(url_for('views.dashboard'))
-        
-            message = session.pop('message')
-            message_type = session.pop('message_type')
-        return render_template('edit.html', url=custom_url, host=host, message=message, message_type=message_type)
+        return render_template('edit.html', url=custom_url, host=host)
     return render_template('dashboard.html')
 
 @views.route("/analytics_data")
