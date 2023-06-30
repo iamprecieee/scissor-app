@@ -7,11 +7,11 @@ from flask_caching import Cache
 from flask_migrate import Migrate
 from itsdangerous import URLSafeTimedSerializer
 from flask_mail import Mail 
-
 from .config import Config
 
 db = SQLAlchemy()
 migrate = Migrate()
+#Configure email support for sending password reset instructions
 mail = Mail()
 
 def create_app(config_class=Config):
@@ -31,9 +31,9 @@ def create_app(config_class=Config):
     })
     app.cache = cache
 
+    #Implement rate-limiting functionality to prevent abuse and control the frequency of requests
     limiter = Limiter(key_func=get_remote_address, app=app, storage_uri=app.config['REDIS_URL'])
     app.limiter = limiter
-
 
     from .views import views
     from .auth import auth
@@ -42,7 +42,6 @@ def create_app(config_class=Config):
     app.register_blueprint(auth, url_prefix="/")
 
     from .models import User
-
 
     login_manager = LoginManager()
     login_manager.login_view = "auth.login"
