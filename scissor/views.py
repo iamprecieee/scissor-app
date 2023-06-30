@@ -128,14 +128,8 @@ def customurl():
                 message = session.pop('message')
                 message_type = session.pop('message_type')
                 return render_template("customurl.html", message=message, message_type=message_type)
-            elif existing_custom_short_url is not None:
-                session['message'] = 'Custom short URL already in use!'
-                session['message_type'] = 'error'
-                message = session.pop('message')
-                message_type = session.pop('message_type')
-                return render_template("customurl.html", message=message, message_type=message_type)
-            elif existing_short_url is not None:
-                session['message'] = 'URL already exists!'
+            elif existing_custom_short_url is not None or existing_short_url is not None:
+                session['message'] = 'Short URL already in use!'
                 session['message_type'] = 'error'
                 message = session.pop('message')
                 message_type = session.pop('message_type')
