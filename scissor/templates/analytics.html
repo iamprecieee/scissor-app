@@ -3,6 +3,7 @@
 {% block content%}
     <br>
     <h1 align="center" style="color:papayawhip">{% block header %}CLICK ANALYTICS{% endblock %}</h1>
+
     <div id="analytics">
         <div class="transparent-box-2">
             <div class="chart-container" align="center" style="color: papayawhip;">
@@ -20,18 +21,17 @@
                                 var g = Math.floor(Math.random() * 256);
                                 var b = Math.floor(Math.random() * 256);
                                 return `rgb(${r}, ${g}, ${b})`;
-                            }
-                            
+                            }                            
                             // Create an array of colors
-                            var colors = data.labels.map(() => getRandomColor());
-                
+                            var colors = data.labels.map(() => getRandomColor());                
                             var chart = new Chart(ctx, {
-                                type: 'pie',
+                                
+                                type: 'pie', // Specifies the chart type as pie
                                 data: {
-                                    labels: data.labels,
+                                    labels: data.labels, // Sets the labels for the chart
                                     datasets: [{
                                         label: 'Click Count',
-                                        data: data.click_counts,
+                                        data: data.click_counts, // Sets the data values for the chart
                                         backgroundColor: colors, // Use the colors array here
                                         borderColor: 'papayawhip', 
                                         borderWidth: 1
@@ -67,13 +67,15 @@
             </div>
         </div>
     </div>
+
     {% block footer %}
     {% if current_user.is_authenticated %}
     <br>
     <div align="center">
-        <a href="/dashboard"><button type="button" class="btn-outline">BACK</button></a>   
+        <a href="/dashboard"><button type="button" class="btn-outline">BACK</button></a> 
     </div>
     <br>
     {% endif %}
     {% endblock %}
+
 {% endblock %}
