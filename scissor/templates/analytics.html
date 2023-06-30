@@ -1,0 +1,79 @@
+{% extends "home.html" %} 
+{% block title %}Analytics{% endblock %} 
+{% block content%}
+    <br>
+    <h1 align="center" style="color:papayawhip">{% block header %}CLICK ANALYTICS{% endblock %}</h1>
+    <div id="analytics">
+        <div class="transparent-box-2">
+            <div class="chart-container" align="center" style="color: papayawhip;">
+                <canvas id="myChart"></canvas>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        $.getJSON("/analytics_data", function(data) {
+                            var ctx = document.getElementById('myChart').getContext('2d');
+                            
+                            // Function to generate random colors
+                            function getRandomColor() {
+                                var r = Math.floor(Math.random() * 256);
+                                var g = Math.floor(Math.random() * 256);
+                                var b = Math.floor(Math.random() * 256);
+                                return `rgb(${r}, ${g}, ${b})`;
+                            }
+                            
+                            // Create an array of colors
+                            var colors = data.labels.map(() => getRandomColor());
+                
+                            var chart = new Chart(ctx, {
+                                type: 'pie',
+                                data: {
+                                    labels: data.labels,
+                                    datasets: [{
+                                        label: 'Click Count',
+                                        data: data.click_counts,
+                                        backgroundColor: colors, // Use the colors array here
+                                        borderColor: 'papayawhip', 
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            ticks: {
+                                                stepSize: 5,
+                                                color: 'papayawhip'
+                                            }
+                                        },
+                                        x: {
+                                            ticks: {
+                                                color: 'papayawhip'
+                                            }
+                                        }
+                                    },
+                                    plugins: {
+                                        legend: {
+                                            labels: {
+                                                color: 'papayawhip'
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+    {% block footer %}
+    {% if current_user.is_authenticated %}
+    <br>
+    <div align="center">
+        <a href="/dashboard"><button type="button" class="btn-outline">BACK</button></a>   
+    </div>
+    <br>
+    {% endif %}
+    {% endblock %}
+{% endblock %}
