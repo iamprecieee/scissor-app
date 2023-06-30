@@ -222,7 +222,9 @@ def update(url_key):
                 if link_exists:
                     session['message'] = 'That custom path already exists.'
                     session['message_type'] = 'error'
-                    return redirect(url_for('views.update', url_key=url_key))
+                    message = session.pop('message')
+                    message_type = session.pop('message_type')
+                    return render_template('edit.html', message=message, message_type=message_type)
                 elif link2_exists:
                     session['message'] = 'That short path already exists.'
                     session['message_type'] = 'error'
