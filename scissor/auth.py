@@ -4,7 +4,6 @@ from . import db, mail
 from .models import User, PasswordHistory
 from flask_login import login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
-import uuid
 from functools import wraps
 from requests_oauthlib import OAuth2Session
 import requests
@@ -92,15 +91,12 @@ def logout():
     session['message_type'] = 'success'
     return redirect(url_for("views.home"))
 
-
-
 @auth.route('/initiate_password_reset', methods=['POST'])
 @limit("10 per minute")
 def initiate_password_reset(email=None):
     if not email:
         email = request.form.get('email')
     user = User.query.filter_by(email=email).first()
-
     if user:
         # create a token with the user's email
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
@@ -115,7 +111,6 @@ def initiate_password_reset(email=None):
                       recipients=[email])
         msg.body = f'''To reset your password, follow the link below:
 {reset_link}
-
 If you did not make this request, simply ignore this email and no changes will be made.
 '''
         # send the email
@@ -132,7 +127,6 @@ If you did not make this request, simply ignore this email and no changes will b
         session['message'] = 'Email not found!'
         session['message_type'] = 'error'
         return redirect(url_for("auth.login"))
-
 
 @auth.route("/forgot_password", methods=['GET', 'POST'])
 @limit("10 per minute")
@@ -209,7 +203,6 @@ def oauth_callback():
         session['message'] = 'Failed to obtain an access token.'
         session['message_type'] = 'error'
     return redirect(url_for("auth.login"))
-
 
 @auth.route("/reset_password/<token>", methods=['GET', 'POST'])
 @limit("10 per minute")
