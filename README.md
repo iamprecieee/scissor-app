@@ -22,11 +22,13 @@ Scissor is a URL shortener application which takes a long URL as input and provi
 
 **Flask-Migrate**: Handles SQLAlchemy database migrations for Flask applications using Alembic.
 
+**Flask-Mail**: Configures email support for sending password reset instructions.
+
 
 
 ## How Scissor Works
 After a user signs up or logs in, they can enter any long URL into the provided form. The Scissor App will first check that the URL is valid, and then create a short URL (or a custom URL) that redirects to the original URL. All the short URLs and custom URLs are associated with the user who created them.
-Each shortened (or custom-shortened) URL is unique. When the URL is visited, the application increments a click count, tracking how many times the link has been used. Also, users can generate a QR code for their short URL or custom URL.
+Each shortened (or custom-shortened) URL is unique. When the URL is visited, the application increments a click count, tracking how many times the link has been used; and the data can be viewed in a chart for all created links. Also, users can generate a QR code for their short URL or custom URL.
 
 
 
@@ -53,15 +55,35 @@ Each shortened (or custom-shortened) URL is unique. When the URL is visited, the
 
 **REDIS_URL**: The URL to connect to the Redis server.
 
+**MAIL_SERVER**: This is the SMTP server used to send emails from your application.
+
+**MAIL_USERNAME**: The username for the SMTP server. This would be the email address from which emails are sent.
+
+**MAIL_PASSWORD**: The password for the SMTP server. Along with the username, this authenticates the application to the mail server.
+
+**TOKEN_URL**: This is a URL used for token-based authentication in APIs. It is used to retrieve a token for password reset requests.
+
+**CLIENT_ID and CLIENT_SECRET**: These are used for OAuth authentication. Both are confidential and are only be used to authenticate the identity of the application to the authorization server.
+
+**REDIRECT_URI**: This is also used for OAuth. After a user successfully authorizes an application, the authorization server will redirect the user back to the application with a code in the URL. This redirect URI is where the server will send that code.
+
 ### Here are the endpoints used in the Scissor app:
 
-**/ or /home**: The home page of the application. Displays all shortened URLs for the currently logged-in user.
+**/ or /home**: The home page of the application. 
+
+**/dashboard**: Displays all shortened URLs for the currently logged-in user.
+
+**/analytics**: Displays lick analytics of all shortened URLs for the currently logged-in user.
 
 **/login**: Log in to the application. Limited to 10 attempts per minute.
 
 **/signup**: Sign up for a new account. Limited to 10 attempts per minute.
 
 **/logout**: Log out of the application.
+
+**/forgot_password**: Collect and verifies credentials needed for and initiates a password reset process.
+
+**/reset_password/<token>**: Update to a new password. The token is sent to the user's email.
 
 **/shortenurl**: Generate a shortened URL. Requires login.
 
@@ -70,6 +92,10 @@ Each shortened (or custom-shortened) URL is unique. When the URL is visited, the
 **/<url_key>**: Redirect to the original URL corresponding to the provided url_key.
 
 **/generate_qr/<url_key>**: Generate a QR code for the provided url_key. Requires login.
+
+**/<url_key>/edit**: Edit a shortened URL.
+
+**/<url_key>/delete**: Delete a short or custom-short URL.
 
 ***Database Migrations***:
 The application uses Flask-Migrate, which is a Flask extension that handles SQLAlchemy database migrations. This is especially useful as it provides a command-line interface for performing migrations, including creating migration scripts automatically.
@@ -114,7 +140,7 @@ Unlock the power of concise sharing with Scissor. Make your links impactful, tra
 
 *pip install -r requirements.txt*
 
-### Set up the necessary environment variables:
+### Set up the necessary environment variables including:
 
 *export SECRET_KEY=<your-secret-key>*
 
@@ -128,7 +154,7 @@ Unlock the power of concise sharing with Scissor. Make your links impactful, tra
 
 ### To run the server, use the following command in the root directory:
 
-*flask run*
+*flask run* or *python3 app.py*
 
 ### To initialize the migrations for the first time, run:
 
