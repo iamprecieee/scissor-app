@@ -214,7 +214,9 @@ def update(url_key):
     custom_url = CustomUrl.query.filter_by(custom_short_url=url_key, user_id=current_user.id).first()
     host = request.host_url
     if custom_url:
-        if request.method == 'POST':
+        message = None
+        message_type = None
+        if request.method == 'POST' and 'message' in session:
             custom_path = request.form['custom_path']
             if custom_path:
                 link_exists = CustomUrl.query.filter_by(custom_short_url=custom_path).first()
@@ -222,21 +224,20 @@ def update(url_key):
                 if link_exists:
                     session['message'] = 'That custom path already exists.'
                     session['message_type'] = 'error'
-                    message = session.pop('message')
-                    message_type = session.pop('message_type')
-                    return render_template('edit.html', message=message, message_type=message_type)
+                    return redirect(url_for('views.update', url_key=url_key))
                 elif link2_exists:
                     session['message'] = 'That short path already exists.'
                     session['message_type'] = 'error'
-                    message = session.pop('message')
-                    message_type = session.pop('message_type')
-                    return render_template('edit.html', message=message, message_type=message_type)
+                    return redirect(url_for('views.update', url_key=url_key))
                 custom_url.custom_short_url = custom_path
                 db.session.commit()
                 session['message'] = 'Post updated!'
                 session['message_type'] = 'success'
                 return redirect(url_for('views.dashboard'))
-        return render_template('edit.html', url=custom_url, host=host)
+        
+            message = session.pop('message')
+            message_type = session.pop('message_type')
+        return render_template('edit.html', url=custom_url, host=host, message=message, message_type=message_type)
     return render_template('dashboard.html')
 
 @views.route("/analytics_data")
