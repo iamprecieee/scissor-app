@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session, redirect, url_for, current_app as app, send_file
+from flask import Blueprint, render_template, request, session, redirect, url_for, current_app as app, send_file, jsonify
 from flask_login import login_required, current_user
 from .models import Url, CustomUrl
 from . import db
@@ -59,7 +59,6 @@ def dashboard():
         message_type = session.pop('message_type')
     return render_template("dashboard.html", user = current_user, urls = urls, custom_urls=custom_urls, server_name=app.config['SERVER_NAME'], message=message, message_type=message_type)
 
-
 @views.route("/shortenurl", methods=['GET', 'POST'])
 @login_required
 @limit("10 per minute")
@@ -119,34 +118,28 @@ def customurl():
                 message = session.pop('message')
                 message_type = session.pop('message_type')
                 return render_template("customurl.html", message=message, message_type=message_type)
-            
             custom_short_url = text2
             existing_url = CustomUrl.query.filter_by(original_url=original_url, user_id=current_user.id).first()
             existing_custom_short_url = CustomUrl.query.filter_by(custom_short_url=custom_short_url, user_id=current_user.id).first()
-
-            existing_short_url = Url.query.filter_by(short_url=custom_short_url, user_id=current_user.id).first()
-           
+            existing_short_url = Url.query.filter_by(short_url=custom_short_url, user_id=current_user.id).first()     
             if existing_url is not None:
                 session['message'] = 'URL already exists!'
                 session['message_type'] = 'error'
                 message = session.pop('message')
                 message_type = session.pop('message_type')
                 return render_template("customurl.html", message=message, message_type=message_type)
-    
             elif existing_custom_short_url is not None:
                 session['message'] = 'Custom short URL already in use!'
                 session['message_type'] = 'error'
                 message = session.pop('message')
                 message_type = session.pop('message_type')
                 return render_template("customurl.html", message=message, message_type=message_type)
-
             elif existing_short_url is not None:
                 session['message'] = 'URL already exists!'
                 session['message_type'] = 'error'
                 message = session.pop('message')
                 message_type = session.pop('message_type')
                 return render_template("customurl.html", message=message, message_type=message_type)
-
             else:
                 new_url = CustomUrl(original_url=original_url, custom_short_url=custom_short_url, user_id=current_user.id)
                 db.session.add(new_url)
@@ -244,13 +237,11 @@ def analytics_data():
     # Get the URLs for the current user
     urls = Url.query.filter_by(user_id=current_user.id).all()
     custom_urls = CustomUrl.query.filter_by(user_id=current_user.id).all()
-
     # Prepare the data
     data = {
         "labels": [url.short_url for url in urls] + [c_url.custom_short_url for c_url in custom_urls],
         "click_counts": [url.click_count for url in urls] + [c_url.click_count for c_url in custom_urls]
     }
-
     return jsonify(data)
 
 
