@@ -2,12 +2,18 @@
 
 
 
+
+
 ## Description
+
 Scissor is a URL shortener application which takes a long URL as input and provides a shortened version of the URL. The application is built using Flask, a Python web framework, and uses SQLAlchemy for the ORM (Object-Relational Mapping) layer and SQLite as the database. The application also uses Flask-Migrate for handling database schema migrations, which makes it easier to adapt the database schema as the application evolves over time.
 
 
 
+
 ## Main Components
+
+
 ### Here are the main components of the Scissor App:
 
 **Flask**: A micro web framework written in Python that is easy to use and provides the flexibility to use extensions like Flask-SQLAlchemy and Flask-Login.
@@ -27,12 +33,16 @@ Scissor is a URL shortener application which takes a long URL as input and provi
 
 
 ## How Scissor Works
+
 After a user signs up or logs in, they can enter any long URL into the provided form. The Scissor App will first check that the URL is valid, and then create a short URL (or a custom URL) that redirects to the original URL. All the short URLs and custom URLs are associated with the user who created them.
 Each shortened (or custom-shortened) URL is unique. When the URL is visited, the application increments a click count, tracking how many times the link has been used; and the data can be viewed in a chart for all created links. Also, users can generate a QR code for their short URL or custom URL.
 
 
 
+
 ## App Structure
+
+
 ### Here is the structure of the Scissor app:
 
 **__init__.py**: This is where the Flask app is created and configured. The SQLAlchemy database, Flask login manager, and Flask limiter are also initialized here.
@@ -118,6 +128,7 @@ In addition to shortening URLs, the application also provides some basic analyti
 
 
 
+
 ## Why Scissor?
 
 Streamline Sharing: Say goodbye to clunky URLs that get lost in the crowd. Scissor simplifies your links, making them shareable with a click. Whether it's social media, emails, or your website, Scissor ensures a seamless experience for you and your audience.
@@ -134,7 +145,9 @@ Unlock the power of concise sharing with Scissor. Make your links impactful, tra
 
 
 
+
 ## Installation
+
 
 ### Clone the repository to your local environment. In the project's root directory, run the following command to install the necessary dependencies:
 
@@ -150,7 +163,11 @@ Unlock the power of concise sharing with Scissor. Make your links impactful, tra
 
 *export REDIS_URL=<your-redis-url>*
 
+
+
+
 ## Usage
+
 
 ### To run the server, use the following command in the root directory:
 
@@ -171,6 +188,7 @@ Where "message" is a brief description of the changes made.
 ### Finally, to apply the migrations to the database, use:
 
 *flask db upgrade*
+
 
 
 
