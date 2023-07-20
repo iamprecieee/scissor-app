@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for, current_app as app, send_file, jsonify
 from flask_login import login_required, current_user
 from .models import Url, CustomUrl
-from . import db
+from . import db, cache
 import random, string, qrcode, io, requests, logging 
 from functools import wraps
 from urllib.parse import urlparse
@@ -17,17 +17,17 @@ def limit(key):
         return decorated_function
     return decorator
 
-def cache_view(key):  
-    def decorator(f):
-        @wraps(f)
-        def decorated_function(*args, **kwargs):
-            cached = app.cache.get(key)
-            if cached is None:
-                cached = f(*args, **kwargs)
-                app.cache.set(key, cached, timeout=app.config['CACHE_DEFAULT_TIMEOUT'])
-            return cached
-        return decorated_function
-    return decorator
+# def cache_view(key):  
+#     def decorator(f):
+#         @wraps(f)
+#         def decorated_function(*args, **kwargs):
+#             cached = app.cache.get(key)
+#             if cached is None:
+#                 cached = f(*args, **kwargs)
+#                 app.cache.set(key, cached, timeout=app.config['CACHE_DEFAULT_TIMEOUT'])
+#             return cached
+#         return decorated_function
+#     return decorator
 
 #random URL generation
 def generate_short_url():
@@ -52,7 +52,8 @@ def validate_url(url):
 @views.route("/")
 @views.route("/home")
 @limit("20 per minute")
-@cache_view(timeout = 50) 
+# @cache_view(timeout = 50) 
+@cache.cached(timeout = 50)
 def home():
     message = None
     message_type = None
@@ -64,6 +65,7 @@ def home():
 @views.route("/dashboard")
 @login_required
 @limit("10 per minute")
+# @cache_view(timeout = 50)
 def dashboard():
     urls = Url.query.filter_by(user_id=current_user.id).all()
     custom_urls = CustomUrl.query.filter_by(user_id=current_user.id).all()
@@ -77,6 +79,7 @@ def dashboard():
 @views.route("/shortenurl", methods=['GET', 'POST'])
 @login_required
 @limit("10 per minute")
+# @cache_view(timeout = 50)
 def shortenurl():
     if request.method == "POST":
         text = request.form.get('text')
@@ -115,6 +118,7 @@ def shortenurl():
 @views.route("/customurl", methods=['GET', 'POST'])
 @login_required
 @limit("10 per minute")
+# @cache_view(timeout = 50)
 def customurl():
     if request.method == "POST":
         text = request.form.get('text')

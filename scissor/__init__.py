@@ -11,6 +11,7 @@ from .config import Config
 
 db = SQLAlchemy()
 migrate = Migrate()
+cache = Cache()
 #Configure email support for sending password reset instructions
 mail = Mail()
 
@@ -25,12 +26,11 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     mail.init_app(app)
     
-    cache = Cache(app, config={
+    cache.init_app(app, config={
         'CACHE_TYPE': app.config['CACHE_TYPE'], 
         'CACHE_REDIS_URL': app.config['CACHE_REDIS_URL'],
         'CACHE_DEFAULT_TIMEOUT': app.config['CACHE_DEFAULT_TIMEOUT']
     })
-    app.cache = cache
 
     #Implement rate-limiting functionality to prevent abuse and control the frequency of requests
     limiter = Limiter(key_func=get_remote_address, app=app, storage_uri=app.config['REDIS_URL'])
