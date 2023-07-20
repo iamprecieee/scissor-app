@@ -1,6 +1,6 @@
 
 from flask import Blueprint, render_template, redirect, url_for, request, session, current_app as app
-from . import db, mail
+from . import db, mail, cache
 from .models import User, PasswordHistory
 from flask_login import login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -107,12 +107,12 @@ def initiate_password_reset(email=None):
 
         # create an email message
         msg = Message('Password Reset Request',
-                      sender='noreply@yourapp.com',
+                      sender='noreply@scssr.tech',
                       recipients=[email])
         msg.body = f'''To reset your password, follow the link below:
-{reset_link}
-If you did not make this request, simply ignore this email and no changes will be made.
-'''
+                    {reset_link}
+                    If you did not make this request, simply ignore this email and no changes will be made.
+                    '''
         # send the email
         try:
             with mail.connect() as connection:
@@ -158,6 +158,7 @@ def forgot_password():
 
 @auth.route("/oauth_callback")
 @limit("10 per minute")
+@cache.cached(timeout = 50)
 def oauth_callback():
     authorization_base_url = "https://accounts.google.com/o/oauth2/auth"
     token_url = app.config['TOKEN_URL']
@@ -206,6 +207,7 @@ def oauth_callback():
 
 @auth.route("/reset_password/<token>", methods=['GET', 'POST'])
 @limit("10 per minute")
+@cache.cached(timeout = 50)
 def reset_password(token):
     try:
         email = app.serializer.loads(token, salt='email-confirm', max_age=3600)
