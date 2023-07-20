@@ -40,7 +40,7 @@ def validate_url(url):
 @views.route("/")
 @views.route("/home")
 @limit("10 per minute")
-@cache.cached(timeout = 50)
+@cache.cached(timeout = 10)
 def home():
     message = None
     message_type = None
@@ -52,7 +52,7 @@ def home():
 @views.route("/dashboard")
 @login_required
 @limit("10 per minute")
-@cache.cached(timeout = 50)
+@cache.cached(timeout = 10)
 def dashboard():
     urls = Url.query.filter_by(user_id=current_user.id).all()
     custom_urls = CustomUrl.query.filter_by(user_id=current_user.id).all()
