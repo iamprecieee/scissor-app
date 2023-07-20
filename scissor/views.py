@@ -64,7 +64,6 @@ def home():
 @views.route("/dashboard")
 @login_required
 @limit("10 per minute")
-@cache_view("dashboard_page") 
 def dashboard():
     urls = Url.query.filter_by(user_id=current_user.id).all()
     custom_urls = CustomUrl.query.filter_by(user_id=current_user.id).all()
