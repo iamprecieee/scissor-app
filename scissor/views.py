@@ -2,8 +2,9 @@ from flask import Blueprint, render_template, request, session, redirect, url_fo
 from flask_login import login_required, current_user
 from .models import Url, CustomUrl
 from . import db
-import random, string, urllib.parse, qrcode, io, requests, logging 
+import random, string, qrcode, io, requests, logging 
 from functools import wraps
+from urllib.parse import urlparse
 
 views = Blueprint("views", __name__)
 
@@ -13,6 +14,18 @@ def limit(key):
         def decorated_function(*args, **kwargs):
             limiter = app.limiter.limit(key)
             return limiter(f)(*args, **kwargs)
+        return decorated_function
+    return decorator
+
+def cache_view(key):  
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            cached = app.cache.get(key)
+            if cached is None:
+                cached = f(*args, **kwargs)
+                app.cache.set(key, cached, timeout=app.config['CACHE_DEFAULT_TIMEOUT'])
+            return cached
         return decorated_function
     return decorator
 
@@ -27,17 +40,19 @@ logger = logging.getLogger(__name__)
 # URL Validation with status check
 def validate_url(url):
     try:
-        result = urllib.parse.urlparse(url)
-        if all([result.scheme, result.netloc]):
+        parsed_url = urlparse(url)
+        if all([parsed_url.scheme, parsed_url.netloc]):
             response = requests.get(url)
-            return response.status_code == 200
+            response.raise_for_status()  # Raise an exception if the request was not successful (status code >= 400)
+            return True
         return False
-    except ValueError:
+    except requests.exceptions.RequestException:
         return False
 
 @views.route("/")
 @views.route("/home")
 @limit("20 per minute")
+@cache_view("home_page") 
 def home():
     message = None
     message_type = None
@@ -49,6 +64,7 @@ def home():
 @views.route("/dashboard")
 @login_required
 @limit("10 per minute")
+@cache_view("dashboard_page") 
 def dashboard():
     urls = Url.query.filter_by(user_id=current_user.id).all()
     custom_urls = CustomUrl.query.filter_by(user_id=current_user.id).all()
@@ -182,7 +198,7 @@ def generate_qr(url_key):
     )
     qr.add_data('http://' + app.config['SERVER_NAME'] + '/' +url_key)
     qr.make(fit=True)
-    img = qr.make_image(fill='blue', back_color="white")
+    img = qr.make_image(fill_color='lime', back_color='black')
     # Save QR code image to a bytes buffer
     image_buffer = io.BytesIO()
     img.save(image_buffer)

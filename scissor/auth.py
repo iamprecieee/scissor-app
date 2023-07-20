@@ -22,8 +22,21 @@ def limit(key):
         return decorated_function
     return decorator
 
+def cache_view(key):  
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            cached = app.cache.get(key)
+            if cached is None:
+                cached = f(*args, **kwargs)
+                app.cache.set(key, cached, timeout=app.config['CACHE_DEFAULT_TIMEOUT'])
+            return cached
+        return decorated_function
+    return decorator
+
 @auth.route("/login", methods=['GET', 'POST'])
 @limit("10 per minute")
+@cache_view("login_page")
 def login():
     if request.method == 'POST':
         identifier = request.form.get("identifier")
@@ -49,6 +62,7 @@ def login():
 
 @auth.route("/signup", methods=['GET', 'POST'])
 @limit("10 per minute")
+@cache_view("signup_page")
 def sign_up():
     if request.method == 'POST':
         username = request.form.get("username")

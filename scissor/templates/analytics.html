@@ -2,11 +2,12 @@
 {% block title %}Analytics{% endblock %} 
 {% block content%}
     <br>
-    <h1 align="center" style="color:papayawhip">{% block header %}CLICK ANALYTICS{% endblock %}</h1>
-
+    <h1 align="center" style="color:lime; animation: slideInAndOut 10s linear infinite;">{% block header %}<b>CLICK ANALYTICS</b>{% endblock %}</h1>
+    <br>
+    <br>
     <div id="analytics">
         <div class="transparent-box-2">
-            <div class="chart-container" align="center" style="color: papayawhip;">
+            <div class="chart-container" align="center" style="color: lime;">
                 <canvas id="myChart"></canvas>
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -33,7 +34,7 @@
                                         label: 'Click Count',
                                         data: data.click_counts, // Sets the data values for the chart
                                         backgroundColor: colors, // Use the colors array here
-                                        borderColor: 'papayawhip', 
+                                        borderColor: 'lime', 
                                         borderWidth: 1
                                     }]
                                 },
@@ -43,19 +44,19 @@
                                             beginAtZero: true,
                                             ticks: {
                                                 stepSize: 5,
-                                                color: 'papayawhip'
+                                                color: 'lime'
                                             }
                                         },
                                         x: {
                                             ticks: {
-                                                color: 'papayawhip'
+                                                color: 'lime'
                                             }
                                         }
                                     },
                                     plugins: {
                                         legend: {
                                             labels: {
-                                                color: 'papayawhip'
+                                                color: 'lime'
                                             }
                                         }
                                     }

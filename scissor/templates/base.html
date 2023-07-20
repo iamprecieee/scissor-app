@@ -7,31 +7,37 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 <script src="https://kit.fontawesome.com/0d0b117bbb.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700|Inconsolata|Fira+Mono&display=swap" rel="stylesheet">
 <title>{% block title %}{% endblock %}</title>
+<style>
+  body {
+    font-family: "Roboto Mono", "Inconsolata", "Fira Mono", "Courier New", "Consolas", monospace;
+  }
+</style>
 </head>
-<body style="background-color:rgb(128, 56, 237)">
+<body style="background-color: black; color: lime;">
 
     <!-- header and links to different pages -->
     <div class="collapse" id="navbarToggleExternalContent">
-        <div class="bg-dark p-4">
+        <div class="p-4" style="background-color: black">
             {% if current_user.is_authenticated %}
-            <h4><a class="nav-item nav-link h6" style="color: #4bb4ff" align="center" href="/dashboard">DASHBOARD</a></h4>
+            <h4><a class="nav-item nav-link h6" style="color: lime" align="center" href="/dashboard">DASHBOARD</a></h4>
             <br>
-            <h4><a class="nav-item nav-link h6" style="color: #4bb4ff" align="center" href="/analytics">ANALYTICS</a></h4>
+            <h4><a class="nav-item nav-link h6" style="color: lime" align="center" href="/analytics">ANALYTICS</a></h4>
             <br>
-            <h4><a class="nav-item nav-link h6" style="color: #4bb4ff" align="center" href="/home">HOME</a></h4>
+            <h4><a class="nav-item nav-link h6" style="color: lime" align="center" href="/home">HOME</a></h4>
             <br>
             <h4><a class="nav-item nav-link h6" style="color: rgba(255, 85, 85, 0.971);" align="center" href="/logout">LOGOUT</a></h4>
             <br>
             {% else %}
-            <h4><a class="nav-item nav-link h6" style="color: #4bb4ff;" align="center" href="/login">LOGIN</a></h4>
+            <h4><a class="nav-item nav-link h6" style="color: lime" align="center" href="/login">LOGIN</a></h4>
             {% endif %}
         </div>
       </div>
-      <nav class="navbar navbar-dark bg-dark">
+      <nav class="navbar navbar-dark ">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#" style="color:#4bb4ff"><h3>SCISSOR</h3></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="#" style="color:lime"><h3>SCISSOR</h3></a>
+            <button style="color:lime" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>

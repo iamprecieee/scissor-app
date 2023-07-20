@@ -1,6 +1,6 @@
 .btn-outline-custom {
-    border: 2px solid rgb(84, 245, 69);
-    color: rgb(84, 245, 69);
+    border: 2px solid lime;
+    color: lime;
     background-color: transparent;
     padding: 10px 20px;
     text-align: center;
@@ -12,14 +12,14 @@
 }
 
 .btn-outline-custom:hover {
-    color: purple;
-    background-color: rgb(69, 212, 56);
-    border-color: rgb(69, 212, 56);
+    color: black;
+    background-color: lime;
+    border-color: lime;
 }
 
 .btn-outline {
-    border: 2px solid rgb(246, 217, 34);
-    color: rgb(246, 217, 34);
+    border: 2px solid lime;
+    color: lime;
     background-color: transparent;
     padding: 10px 20px;
     text-align: center;
@@ -31,14 +31,14 @@
 }
 
 .btn-outline:hover {
-    color: purple;
-    background-color: rgb(246, 217, 34);
-    border-color: rgb(246, 217, 34);
+    color: black;
+    background-color: lime;
+    border-color: lime;
 }
 
 .btn-box, .btn-box:focus {
-    border: 1px solid papayawhip;
-    color: papayawhip;
+    border: 1px solid lime;
+    color: lime;
     background: transparent;
     outline: none;
 }
@@ -46,8 +46,8 @@
 .btn-box:-webkit-autofill,
 .btn-box:-webkit-autofill:hover, 
 .btn-box:-webkit-autofill:focus {
-    border: 1px solid papayawhip !important;
-    color: papayawhip !important;
+    border: 1px solid lime !important;
+    color: lime !important;
     background: transparent !important;
     transition: background-color 5000s ease-in-out 0s;
     box-shadow: 0 0 0px 1000px transparent;
@@ -58,22 +58,22 @@
 }
 
 .my-link {
-    color: rgb(246, 217, 34);
+    color: lime;
 }
 
 .my-link:hover {
-    color: rgb(69, 212, 56);
+    color: yellow;
 }
 
 .transparent-box {
     background: rgba(255, 255, 255, 0); 
-    border: 2px solid rgb(69, 212, 56); 
+    border: 2px solid lime; 
     border-radius: 10px; 
 }
 
 .transparent-box-2 {
     background-color: rgba(255, 255, 255, 0); 
-    border: 2px solid rgb(69, 212, 56); 
+    border: 2px solid lime; 
     border-radius: 10px;
     padding: 20px;
     max-width: 80%; 
@@ -83,8 +83,8 @@
 }
 
 .btn-edit {
-    border: solid rgb(246, 217, 34);
-    color: rgb(246, 217, 34);
+    border: solid lime;
+    color: lime;
     background-color: transparent;
     text-align: center;
     text-decoration: none;
@@ -94,9 +94,9 @@
 }
 
 .btn-edit:hover {
-    color: purple;
-    background-color: rgb(246, 217, 34);
-    border-color: rgb(246, 217, 34);
+    color: black;
+    background-color: lime;
+    border-color: lime;
 }
 
 .btn-delete {
@@ -111,14 +111,14 @@
 }
 
 .btn-delete:hover {
-    color: purple;
+    color: black;
     background-color: rgba(235, 65, 65, 0.971);
     border-color: rgba(235, 65, 65, 0.971);
 }
 
 .btn-qr {
-    border: solid #4bb4ff;
-    color: #4bb4ff;
+    border: solid lime;
+    color: lime;
     background-color: transparent;
     text-align: center;
     text-decoration: none;
@@ -128,9 +128,9 @@
 }
 
 .btn-qr:hover {
-    color: purple;
-    background-color: #3daeff;
-    border-color: #3daeff;
+    color: black;
+    background-color: lime;
+    border-color: lime;
 }
 
 .small-modal .modal-dialog {
@@ -139,7 +139,7 @@
 }
 
 .modal-content {
-    border: solid rgb(246, 217, 34);
+    border: solid lime;
     background-color: transparent;
     text-align: center;
     text-decoration: none;
@@ -158,3 +158,21 @@
     height: 80%; 
     margin: auto; 
 }
+
+  @keyframes slideInAndOut {
+    0% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-10%);
+    }
+    50% {
+      transform: translateX(0);
+    }
+    75% {
+        transform: translateX(10%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+  }
