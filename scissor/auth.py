@@ -110,9 +110,9 @@ def initiate_password_reset(email=None):
                       sender='noreply@scssr.tech',
                       recipients=[email])
         msg.body = f'''To reset your password, follow the link below:
-                    {reset_link}
-                    If you did not make this request, simply ignore this email and no changes will be made.
-                    '''
+{reset_link}
+If you did not make this request, simply ignore this email and no changes will be made.
+'''
         # send the email
         try:
             with mail.connect() as connection:
