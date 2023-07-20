@@ -66,7 +66,6 @@ def dashboard():
 @views.route("/shortenurl", methods=['GET', 'POST'])
 @login_required
 @limit("10 per minute")
-@cache.cached(timeout = 50)
 def shortenurl():
     if request.method == "POST":
         text = request.form.get('text')
@@ -105,7 +104,6 @@ def shortenurl():
 @views.route("/customurl", methods=['GET', 'POST'])
 @login_required
 @limit("10 per minute")
-@cache.cached(timeout = 50)
 def customurl():
     if request.method == "POST":
         text = request.form.get('text')
