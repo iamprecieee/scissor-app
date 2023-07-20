@@ -52,7 +52,7 @@ def validate_url(url):
 @views.route("/")
 @views.route("/home")
 @limit("20 per minute")
-@cache_view("home_page") 
+@cache_view(timeout = 50) 
 def home():
     message = None
     message_type = None
