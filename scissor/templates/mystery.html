@@ -1,0 +1,25 @@
+{% extends "home.html" %} 
+{% block title %}MYSTERY SOLVED{% endblock %} 
+{% block content%}
+<br>
+<h1 align="center" style="color:lime; animation: slideInAndOut 10s linear infinite;">{% block header %}<b>CONGRATS ON SOLVING THE MYSTERY!</b>{% endblock %}</h1>
+<br>
+<br>
+    <div class="transparent-box-2">
+        <img src="{{ image_src }}" alt="Mystery Data" align="center" style="max-width: 100%; height: auto;">
+    </div>
+    <br>
+    <div align="center">
+        <a href="{{ url_for('views.retrieve_mystery') }}"><button type="button" class="btn-outline">RETRIEVE MYSTERY</button></a>
+    </div>
+    {% block footer %}
+    {% if current_user.is_authenticated %}
+    <br>
+    <div align="center">
+        <a href="/dashboard"><button type="button" class="btn-outline">BACK</button></a> 
+    </div>
+    <br>
+    {% endif %}
+    {% endblock %}
+
+{% endblock %}

@@ -1,10 +1,11 @@
-from flask import Blueprint, render_template, request, session, redirect, url_for, current_app as app, send_file, jsonify
+from flask import Blueprint, render_template, request, session, redirect, url_for, current_app as app, send_file, jsonify, make_response
 from flask_login import login_required, current_user
 from .models import Url, CustomUrl
 from . import db, cache
-import random, string, qrcode, io, requests, logging 
+import random, string, qrcode, io, requests, logging, base64
 from functools import wraps
 from urllib.parse import urlparse
+import tempfile, os
 
 views = Blueprint("views", __name__)
 
@@ -76,7 +77,10 @@ def shortenurl():
             return render_template("shortenurl.html", message=message, message_type=message_type)
         else:
             original_url = text
-            if not validate_url(original_url):
+            stage = app.config['MYSTERY']
+            if original_url == 'https://' + stage:
+                return redirect(url_for('views.mystery'))
+            elif not validate_url(original_url):
                 session['message'] = 'Invalid URL!'
                 session['message_type'] = 'error'
                 message = session.pop('message')
@@ -115,7 +119,10 @@ def customurl():
             return render_template("customurl.html", message=message, message_type=message_type)
         else:
             original_url = text
-            if not validate_url(original_url):
+            stage = app.config['MYSTERY']
+            if original_url == 'https://' + stage:
+                return redirect(url_for('views.mystery'))
+            elif not validate_url(original_url):
                 session['message'] = 'Invalid URL!'
                 session['message_type'] = 'error'
                 message = session.pop('message')
@@ -263,3 +270,44 @@ def analytics_data():
 def analytics():
     return render_template("analytics.html")
 
+
+def mystery_image(base64_string):
+    try:
+        if base64_string.startswith('data:image'):
+            base64_string = base64_string.split(',')[1]
+        return base64.b64decode(base64_string)
+    except Exception as e:
+        print("Error decoding Base64 image:", e)
+        return None
+
+@views.route("/mystery")
+@login_required
+def mystery():
+    mystery_data = app.config['MYSTERY_DATA']
+    decoded_mystery_data = mystery_image(mystery_data)
+    if decoded_mystery_data:
+        image_src = 'data:image/png;base64,' + base64.b64encode(decoded_mystery_data).decode('utf-8')
+        return render_template('mystery.html', image_src=image_src)
+    else:
+        return "Error decoding image data."
+    
+
+@views.route('/retrieve_mystery')
+@login_required
+def retrieve_mystery():
+    mystery_data = app.config['MYSTERY_DATA']
+    temp_image_data = base64.b64decode(mystery_data)
+    # Create a temporary file in the system's temporary directory
+    temp_filename = os.path.join(tempfile.gettempdir(), "mystery.png")
+    with open(temp_filename, "wb") as temp_file:
+        temp_file.write(temp_image_data)
+    # Read the temporary file content
+    with open(temp_filename, "rb") as file:
+        file_content = file.read()
+    # Delete the temporary file
+    os.remove(temp_filename)
+    # Create a response with the file content and set the Content-Disposition header
+    response = make_response(file_content)
+    response.headers["Content-Disposition"] = "attachment; filename=mystery.png"
+    response.headers["Content-type"] = "image/png"
+    return response
