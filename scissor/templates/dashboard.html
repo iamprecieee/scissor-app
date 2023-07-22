@@ -36,6 +36,10 @@
                         <img src="https://nftstorage.link/ipfs/bafkreidcq65h2etudnvr5gm5wbkdggf5isrwmgjrph7bbtzuhbmv5ucj2q" alt="Instagram Share" width="32" height="32">
                         </a>
                     </div>
+
+                    <div class="btn-edit" onclick="copyToClipboard('http:\/\/{{ server_name }}/{{ url.short_url }}')">
+                        <img src="https://nftstorage.link/ipfs/bafkreibde4peew53qtqsv3nv52hx3iccekvh7esd7novlx6qc3zslmkk4e" alt="Copy To Clipboard" width="32" height="32">
+                    </div>
             </div>
                 <div id="qr_{{ url.short_url }}" style="display: none;">
                     <br><p><img src="" alt="QR Code"></p>
@@ -81,6 +85,10 @@
                             target="_blank" rel="noopener noreferrer">
                             <img src="https://nftstorage.link/ipfs/bafkreidcq65h2etudnvr5gm5wbkdggf5isrwmgjrph7bbtzuhbmv5ucj2q" alt="Instagram Share" width="32" height="32">
                             </a>
+                        </div>
+
+                        <div class="btn-edit" onclick="copyToClipboard('http:\/\/{{ server_name }}/{{ url.custom_short_url }}')">
+                            <img src="https://nftstorage.link/ipfs/bafkreibde4peew53qtqsv3nv52hx3iccekvh7esd7novlx6qc3zslmkk4e" alt="Copy To Clipboard" width="32" height="32">
                         </div>
                 </div>
                 <div id="qr_{{ url.custom_short_url }}" style="display: none;">

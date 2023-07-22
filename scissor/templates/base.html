@@ -6,6 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 <script src="https://kit.fontawesome.com/0d0b117bbb.js" crossorigin="anonymous"></script>
+<script>
+  function copyToClipboard(text) {
+      const temp_text = document.createElement('textarea');
+      temp_text.value = text;
+      document.body.appendChild(temp_text);
+      temp_text.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp_text);
+      var modalBody = document.getElementById('notificationModalBody');
+      modalBody.innerHTML = "<p class='text-success'>" + "Link copied to clipboard!" + "</p>";
+    $('#notificationModal').modal('show');
+    setTimeout(function() {
+      $('#notificationModal').modal('hide');
+    }, 1000);
+  }
+  </script>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700|Inconsolata|Fira+Mono&display=swap" rel="stylesheet">
 <title>{% block title %}{% endblock %}</title>
