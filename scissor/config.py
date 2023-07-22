@@ -19,8 +19,8 @@ class Config:
     CLIENT_ID = os.getenv("CLIENT_ID")
     CLIENT_SECRET = os.getenv("CLIENT_SECRET")
     REDIRECT_URI = os.getenv("REDIRECT_URI")
-    # MYSTERY_DATA = os.getenv("MYSTERY_DATA")
-    # MYSTERY = os.getenv("MYSTERY")
+    MYSTERY_DATA = os.getenv("MYSTERY_DATA")
+    MYSTERY = os.getenv("MYSTERY")
 
     
     if SQLALCHEMY_DATABASE_URI.startswith("postgres://"):
