@@ -109,7 +109,8 @@ def shortenurl():
 def customurl():
     if request.method == "POST":
         text = request.form.get('text')
-        text2 = request.form.get('text2')
+        text2 = request.form['text2']
+        
         if not text or not text2:
             session['message'] = 'Text cannot be empty!'
             session['message_type'] = 'error'
@@ -126,31 +127,29 @@ def customurl():
                 session['message_type'] = 'error'
                 message = session.pop('message')
                 message_type = session.pop('message_type')
-                return render_template("customurl.html", message=message, message_type=message_type)
-            custom_short_url = text2
-            existing_url = CustomUrl.query.filter_by(original_url=original_url, user_id=current_user.id).first()
-            existing_custom_short_url = CustomUrl.query.filter_by(custom_short_url=custom_short_url, user_id=current_user.id).first()
-            existing_short_url = Url.query.filter_by(short_url=custom_short_url, user_id=current_user.id).first()     
-            if existing_url is not None:
-                session['message'] = 'URL already exists!'
-                session['message_type'] = 'error'
-                message = session.pop('message')
-                message_type = session.pop('message_type')
-                return render_template("customurl.html", message=message, message_type=message_type)
-            elif existing_custom_short_url is not None:
-                session['message'] = 'Custom short URL already in use!'
-                session['message_type'] = 'error'
-                message = session.pop('message')
-                message_type = session.pop('message_type')
-                return render_template("customurl.html", message=message, message_type=message_type)
-            elif existing_short_url is not None:
-                session['message'] = 'Short URL already in use!'
-                session['message_type'] = 'error'
-                message = session.pop('message')
-                message_type = session.pop('message_type')
-                return render_template("customurl.html", message=message, message_type=message_type)
-            else:
-                new_url = CustomUrl(original_url=original_url, custom_short_url=custom_short_url, user_id=current_user.id)
+                return render_template("customurl.html", message=message, message_type=message_type) 
+            if text2:
+                link_exists = CustomUrl.query.filter_by(custom_short_url=text2).first()
+                link2_exists = Url.query.filter_by(short_url=text2).first()
+                if link_exists:
+                    session['message'] = 'That custom path already exists.'
+                    session['message_type'] = 'error'
+                    message = session.pop('message')
+                    message_type = session.pop('message_type')
+                    return render_template('customurl.html', message=message, message_type=message_type)
+                elif link2_exists:
+                    session['message'] = 'That short path already exists.'
+                    session['message_type'] = 'error'
+                    message = session.pop('message')
+                    message_type = session.pop('message_type')
+                    return render_template('customurl.html', message=message, message_type=message_type)
+                elif text2.startswith('http://') or text2.startswith('https://') or text2.startswith('www.'):
+                    session['message'] = 'short_path cannot be a link!'
+                    session['message_type'] = 'error'
+                    message = session.pop('message')
+                    message_type = session.pop('message_type')
+                    return render_template('customurl.html', message=message, message_type=message_type)
+                new_url = CustomUrl(original_url=original_url, custom_short_url=text2, user_id=current_user.id)
                 db.session.add(new_url)
                 db.session.commit()
                 session['message'] = 'Post created!'
@@ -240,6 +239,12 @@ def update(url_key):
                     message = session.pop('message')
                     message_type = session.pop('message_type')
                     return render_template('edit.html', url=custom_url, host=host, message=message, message_type=message_type)
+                elif custom_path.startswith('http://') or custom_path.startswith('https://') or custom_path.startswith('www.'):
+                    session['message'] = 'short_path cannot be a link!'
+                    session['message_type'] = 'error'
+                    message = session.pop('message')
+                    message_type = session.pop('message_type')
+                    return render_template('customurl.html', message=message, message_type=message_type)
                 custom_url.custom_short_url = custom_path
                 db.session.commit()
                 session['message'] = 'Post updated!'
