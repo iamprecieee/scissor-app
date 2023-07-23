@@ -105,7 +105,10 @@ def initiate_password_reset(email=None):
         # create a password reset link with the token
         reset_link = url_for('auth.reset_password', token=token, _external=True)
 
-        # create an email message
+        msg = Message('Password Reset Request',
+                      sender='noreply@scssr.tech',
+                      recipients=[email])
+        
         message_template = '''
         <html>
         <body style="color: lime; background-color: black;">
@@ -116,7 +119,6 @@ def initiate_password_reset(email=None):
             <p>If you did not ask to reset your password, please ignore this message.</p>
             <p>The Scissor team</p>
             <br>
-            <p>This message was mailed to [{{ email }}] by the scssr.tech team.</p>
         </body>
         </html>
         '''
@@ -125,11 +127,8 @@ def initiate_password_reset(email=None):
         message_body = render_template_string(message_template, username=user.username, reset_link=reset_link, email=email)
 
         # create an email message
-        msg = Message('Password Reset Request',
-                      sender='noreply@scssr.tech',
-                      recipients=[email])
+        
         msg.body = message_body
-        msg.html = message_body
         # send the email
         try:
             with mail.connect() as connection:
