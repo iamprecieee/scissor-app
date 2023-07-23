@@ -171,7 +171,6 @@ def redirection(url_key):
         return redirect(url_for('views.dashboard'))
 
 @views.route('/generate_qr/<url_key>')
-@login_required
 @limit("10 per minute")
 def generate_qr(url_key):
     """ Generates QR code """
@@ -253,9 +252,7 @@ def update(url_key):
         return render_template('edit.html', url=custom_url, host=host)
     return render_template('dashboard.html')
 
-@views.route("/analytics_data")
-@login_required
-@limit("10 per minute")
+
 def analytics_data():
     # Get the URLs for the current user
     urls = Url.query.filter_by(user_id=current_user.id).all()
@@ -294,7 +291,7 @@ def count_total_clicks():
 @limit("10 per minute")
 def stats():
     if not current_user.is_admin:
-        return "Access denied. Only admin users can access this page.", 403
+        return redirect(url_for('views.error'))
     total_users = count_total_users()
     total_links = count_total_links()
     total_clicks = count_total_clicks()
@@ -319,3 +316,8 @@ def retrieve_mystery():
     response.headers["Content-Disposition"] = "attachment; filename=mystery.png"
     response.headers["Content-type"] = "image/png"
     return response
+
+@views.route('/error')
+@login_required
+def error():
+    return render_template('error.html')

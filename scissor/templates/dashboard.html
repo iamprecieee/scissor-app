@@ -1,8 +1,18 @@
 {% extends "home.html" %} 
 {% block title %}Dashboard{% endblock %} 
 {% block content%}
+    <div align="center">
+        <a href="/stats">
+        <button type="button" class="btn-outline-custom">
+            USAGE STATS
+        </button></a>
+        <a href="/analytics">
+            <button type="button" class="btn-outline-custom">
+                ANALYTICS
+            </button></a>
+    </div>
     <br>
-
+    <br>
     <h1 align="center" style="color:lime; animation: slideInAndOut 10s linear infinite;">{% block header %}<b>RECENT SHORT URLS</b>{% endblock %}</h1>
     <br>
     <div id="urls">
@@ -133,15 +143,6 @@
         </button></a>
     </div>
     <br>
-    {% endif %}
-    {% if current_user.is_admin %}
-    <div align="center">
-        <a href="/stats">
-          <button type="button" class="btn-outline-custom">
-            USAGE STATS
-          </button></a>
-      </div>
-      <br>
     {% endif %}
     {% endblock %} 
 
