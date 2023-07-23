@@ -1,21 +1,93 @@
 {% extends "home.html" %} 
 {% block title %}App Statistics{% endblock %} 
-{% block content%}
+{% block content %}
     <br>
     <h1 align="center" style="color:lime; animation: slideInAndOut 10s linear infinite;"><b>App Statistics</b></h1>
     <br>
     <br>
-    <div id="analytics">
+    <div id="stats">
         <div class="transparent-box-2">
             <div class="chart-container" align="center" style="color: lime;">
                 <p>Total Users: {{ total_users }}</p>
-                <p>Total Links Generated: {{ total_links }}</p>
-                <p>Total Clicks: {{ total_clicks }}</p>
+                <p>Total Custom-short URLs: {{ total_custom_urls }}</p>
+                <p>Total Short URLs: {{ total_non_custom_urls }}</p>
+                <p>Total Clicks (Custom-short URLs): {{ total_clicks_custom }}</p>
+                <p>Total Clicks (Short URLs): {{ total_clicks_non_custom }}</p>
+                <p>Total Clicks: {{ total_clicks_custom + total_clicks_non_custom }}</p>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+
+    <!-- Display URLs Created by Each User -->
+    <h1 align="center" style="color:lime; animation: slideInAndOut 10s linear infinite;"><b>URLs Created by Each User:</b></h1>
+    <br>
+    <br>
+    <div id="userStats">
+        <div class="transparent-box-2">
+            <div class="chart-container" align="center" style="color: lime;">
+                <canvas id="userChart"></canvas>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        $.getJSON("/stats_data", function(data) {
+                            var ctx = document.getElementById('userChart').getContext('2d');
+    
+                            // Function to generate random colors
+                            function getRandomColor() {
+                                var r = Math.floor(Math.random() * 256);
+                                var g = Math.floor(Math.random() * 256);
+                                var b = Math.floor(Math.random() * 256);
+                                return `rgb(${r}, ${g}, ${b})`;
+                            }                            
+                            // Create an array of colors
+                            var colors = data.username.map(() => getRandomColor());                
+                            var chart = new Chart(ctx, {
+                                type: 'pie', // Specifies the chart type as pie
+                                data: {
+                                    labels: data.username, // Sets the labels for the chart
+                                    datasets: [{
+                                        label: 'Total URLs',
+                                        data: data.total_urls, // Sets the data values for the chart
+                                        backgroundColor: colors, // Use the colors array here
+                                        borderColor: 'lime', 
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            ticks: {
+                                                stepSize: 5,
+                                                color: 'lime'
+                                            }
+                                        },
+                                        x: {
+                                            ticks: {
+                                                color: 'lime'
+                                            }
+                                        }
+                                    },
+                                    plugins: {
+                                        legend: {
+                                            labels: {
+                                                color: 'lime'
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        });
+                    });
+                </script>
             </div>
         </div>
     </div>
 
-    {% block footer %}
+{% block footer %}
     {% if current_user.is_authenticated %}
     <br>
     <div align="center">
@@ -23,5 +95,6 @@
     </div>
     <br>
     {% endif %}
-    {% endblock %}
+{% endblock %}
+
 {% endblock %}

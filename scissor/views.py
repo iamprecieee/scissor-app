@@ -252,7 +252,7 @@ def update(url_key):
         return render_template('edit.html', url=custom_url, host=host)
     return render_template('dashboard.html')
 
-
+@views.route("/analytics_data")
 def analytics_data():
     # Get the URLs for the current user
     urls = Url.query.filter_by(user_id=current_user.id).all()
@@ -272,11 +272,14 @@ def analytics():
     return render_template("analytics.html")
 
 
+def count_total_custom_urls():
+    return CustomUrl.query.count()
+
+def count_total_non_custom_urls():
+    return Url.query.count()
+
 def count_total_users():
     return User.query.count()
-
-def count_total_links():
-    return Url.query.count() + CustomUrl.query.count()
 
 def count_total_clicks():
     total_clicks = 0
@@ -286,16 +289,63 @@ def count_total_clicks():
         total_clicks += custom_url.click_count
     return total_clicks
 
+def count_clicks_by_type():
+    total_clicks_custom_urls = 0
+    total_clicks_non_custom_urls = 0
+
+    for custom_url in CustomUrl.query.all():
+        total_clicks_custom_urls += custom_url.click_count
+
+    for url in Url.query.all():
+        total_clicks_non_custom_urls += url.click_count
+
+    return total_clicks_custom_urls, total_clicks_non_custom_urls
+
+
+def count_urls_per_user():
+    user_url_counts = {}
+    users = User.query.all()
+
+    for user in users:
+        total_urls = len(user.urls) + len(user.custom_urls)
+        user_url_counts[user.username] = {
+            'email': user.email,
+            'total_urls': total_urls
+        }
+
+    return user_url_counts
+
 @views.route("/stats")
 @login_required
 @limit("10 per minute")
 def stats():
     if not current_user.is_admin:
         return redirect(url_for('views.error'))
+
     total_users = count_total_users()
-    total_links = count_total_links()
-    total_clicks = count_total_clicks()
-    return render_template("stats.html", total_users=total_users, total_links=total_links, total_clicks=total_clicks)
+    total_custom_urls = count_total_custom_urls()
+    total_non_custom_urls = count_total_non_custom_urls()
+    total_clicks_custom, total_clicks_non_custom = count_clicks_by_type()
+    user_url_counts = count_urls_per_user()
+
+    return render_template("stats.html", 
+                           total_users=total_users,
+                           total_custom_urls=total_custom_urls,
+                           total_non_custom_urls=total_non_custom_urls,
+                           total_clicks_custom=total_clicks_custom,
+                           total_clicks_non_custom=total_clicks_non_custom,
+                           user_url_counts=user_url_counts)
+
+
+@views.route("/stats_data")
+def count_urls_per_user():
+    users = User.query.all()
+    data = {
+            'username':[user.username for user in users],
+            'email':[user.email for user in users],
+            'total_urls':[len(user.urls) + len(user.custom_urls) for user in users]
+        }
+    return jsonify(data)
 
 
 @views.route("/mystery")
