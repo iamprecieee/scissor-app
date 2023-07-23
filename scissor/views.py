@@ -253,6 +253,7 @@ def update(url_key):
     return render_template('dashboard.html')
 
 @views.route("/analytics_data")
+@login_required
 def analytics_data():
     # Get the URLs for the current user
     urls = Url.query.filter_by(user_id=current_user.id).all()
@@ -292,20 +293,16 @@ def count_total_clicks():
 def count_clicks_by_type():
     total_clicks_custom_urls = 0
     total_clicks_non_custom_urls = 0
-
     for custom_url in CustomUrl.query.all():
         total_clicks_custom_urls += custom_url.click_count
-
     for url in Url.query.all():
         total_clicks_non_custom_urls += url.click_count
-
     return total_clicks_custom_urls, total_clicks_non_custom_urls
 
 
 def count_urls_per_user():
     user_url_counts = {}
     users = User.query.all()
-
     for user in users:
         total_urls = len(user.urls) + len(user.custom_urls)
         user_url_counts[user.username] = {
@@ -321,7 +318,6 @@ def count_urls_per_user():
 def stats():
     if not current_user.is_admin:
         return redirect(url_for('views.error'))
-
     total_users = count_total_users()
     total_custom_urls = count_total_custom_urls()
     total_non_custom_urls = count_total_non_custom_urls()
@@ -338,7 +334,10 @@ def stats():
 
 
 @views.route("/stats_data")
+@login_required
 def count_urls_per_user():
+    if not current_user.is_admin:
+        return redirect(url_for('views.error'))
     users = User.query.all()
     data = {
             'username':[user.username for user in users],
