@@ -105,30 +105,41 @@ def initiate_password_reset(email=None):
         # create a password reset link with the token
         reset_link = url_for('auth.reset_password', token=token, _external=True)
 
+        # create an email message
         msg = Message('Password Reset Request',
                       sender='noreply@scssr.tech',
                       recipients=[email])
-        
-        message_template = '''
-        <html>
-        <body style="color: lime; background-color: black;">
-            <h1>Scissor</h1>
-            <p>Hi {{ username }},</p>
-            <p>Let's reset your password so you can get back to shortening.</p>
-            <p><a href="{{ reset_link }}" style="display:inline-block; border: 2px solid lime; color: lime; background-color: transparent; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; border-radius: 15px; transition: all 0.5s;">Reset Password</a></p>
-            <p>If you did not ask to reset your password, please ignore this message.</p>
-            <p>The Scissor team</p>
-            <br>
-        </body>
-        </html>
-        '''
+        msg.body = f'''To reset your password, follow the link below:
+{reset_link}
+If you did not make this request, simply ignore this email and no changes will be made.
+'''
 
-        # Render the template with the necessary variables
-        message_body = render_template_string(message_template, username=user.username, reset_link=reset_link, email=email)
-
-        # create an email message
+        # msg = Message('Password Reset Request',
+        #               sender='noreply@scssr.tech',
+        #               recipients=[email])
         
-        msg.body = message_body
+        # message_template = '''
+        # <html>
+        # <body style="color: lime; background-color: black;">
+        #     <h1>Scissor</h1>
+        #     <p>Hi {{ username }},</p>
+        #     <p>Let's reset your password so you can get back to shortening.</p>
+        #     <p><a href="{{ reset_link }}" style="display:inline-block; border: 2px solid lime; color: lime; background-color: transparent; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; border-radius: 15px; transition: all 0.5s;">Reset Password</a></p>
+        #     <p>If you did not ask to reset your password, please ignore this message.</p>
+        #     <p>The Scissor team</p>
+        #     <br>
+        #     <p>This message was mailed to [{{ email }}] by the scssr.tech team.</p>
+        # </body>
+        # </html>
+        # '''
+
+        # # Render the template with the necessary variables
+        # message_body = render_template_string(message_template, username=user.username, reset_link=reset_link, email=email)
+
+        # # create an email message
+        
+        # msg.body = message_body
+        # msg.html = message_body
         # send the email
         try:
             with mail.connect() as connection:
