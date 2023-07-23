@@ -6,6 +6,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique = True)
     username = db.Column(db.String(150), unique = False)
     password = db.Column(db.String(150))
+    is_admin = db.Column(db.Boolean, default=False)
     urls = db.relationship('Url', backref='user', lazy=True)
     custom_urls = db.relationship('CustomUrl', backref='user', lazy=True)
 

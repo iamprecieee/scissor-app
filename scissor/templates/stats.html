@@ -1,0 +1,27 @@
+{% extends "home.html" %} 
+{% block title %}App Statistics{% endblock %} 
+{% block content%}
+    <br>
+    <h1 align="center" style="color:lime; animation: slideInAndOut 10s linear infinite;"><b>App Statistics</b></h1>
+    <br>
+    <br>
+    <div id="analytics">
+        <div class="transparent-box-2">
+            <div class="chart-container" align="center" style="color: lime;">
+                <p>Total Users: {{ total_users }}</p>
+                <p>Total Links Generated: {{ total_links }}</p>
+                <p>Total Clicks: {{ total_clicks }}</p>
+            </div>
+        </div>
+    </div>
+
+    {% block footer %}
+    {% if current_user.is_authenticated %}
+    <br>
+    <div align="center">
+        <a href="/dashboard"><button type="button" class="btn-outline">BACK</button></a> 
+    </div>
+    <br>
+    {% endif %}
+    {% endblock %}
+{% endblock %}

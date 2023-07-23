@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for, current_app as app, send_file, jsonify, make_response
 from flask_login import login_required, current_user
-from .models import Url, CustomUrl
+from .models import User, Url, CustomUrl
 from . import db, cache
 import random, string, qrcode, io, requests, logging
 from functools import wraps
@@ -273,6 +273,32 @@ def analytics_data():
 @limit("10 per minute")
 def analytics():
     return render_template("analytics.html")
+
+
+def count_total_users():
+    return User.query.count()
+
+def count_total_links():
+    return Url.query.count() + CustomUrl.query.count()
+
+def count_total_clicks():
+    total_clicks = 0
+    for url in Url.query.all():
+        total_clicks += url.click_count
+    for custom_url in CustomUrl.query.all():
+        total_clicks += custom_url.click_count
+    return total_clicks
+
+@views.route("/stats")
+@login_required
+@limit("10 per minute")
+def stats():
+    if not current_user.is_admin:
+        return "Access denied. Only admin users can access this page.", 403
+    total_users = count_total_users()
+    total_links = count_total_links()
+    total_clicks = count_total_clicks()
+    return render_template("stats.html", total_users=total_users, total_links=total_links, total_clicks=total_clicks)
 
 
 @views.route("/mystery")
