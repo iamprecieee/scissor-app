@@ -1,8 +1,8 @@
 import os
 class Config:
-    SECRET_KEY = os.getenv("SECRET_KEY")
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI")
-    SERVER_NAME = os.getenv("SERVER_NAME", 'scssr.tech')
+    SECRET_KEY = 'e70e6a4a54fda890589dd01577b5d751'
+    SQLALCHEMY_DATABASE_URI = "postgres://scissordb_spvj_user:FT7PUU4WbJUPVMfrX9OvDSphje0f15OZ@dpg-cieupudgkuvq1o2o2pjg-a.oregon-postgres.render.com/scissordb_spvj"
+    SERVER_NAME = os.getenv("SERVER_NAME", '127.0.0.1:5000')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     REDIS_URL = os.getenv("REDIS_URL")
     CACHE_TYPE = 'redis'
