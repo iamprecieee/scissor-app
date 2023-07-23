@@ -134,6 +134,15 @@
     </div>
     <br>
     {% endif %}
+    {% if current_user.is_admin %}
+    <div align="center">
+        <a href="/stats">
+          <button type="button" class="btn-outline-custom">
+            USAGE STATS
+          </button></a>
+      </div>
+      <br>
+    {% endif %}
     {% endblock %} 
 
 {% endblock %}
