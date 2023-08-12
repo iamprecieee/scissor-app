@@ -151,17 +151,17 @@ Unlock the power of concise sharing with Scissor. Make your links impactful, tra
 
 ### Clone the repository to your local environment. In the project's root directory, run the following command to install the necessary dependencies:
 
-*pip install -r requirements.txt*
+```pip install -r requirements.txt```
 
 ### Set up the necessary environment variables including:
 
-*export SECRET_KEY=<your-secret-key>*
+```export SECRET_KEY= <your-secret-key>```
 
-*export DATABASE_URI=<your-database-uri>*
+```export DATABASE_URI= <your-database-uri>```
 
-*export SERVER_NAME=<your-server-name>*
+```export SERVER_NAME= <your-server-name>```
 
-*export REDIS_URL=<your-redis-url>*
+```export REDIS_URL= <your-redis-url>```
 
 
 
@@ -171,23 +171,23 @@ Unlock the power of concise sharing with Scissor. Make your links impactful, tra
 
 ### To run the server, use the following command in the root directory:
 
-*flask run* or *python3 app.py*
+```flask run``` or ```python3 app.py```
 
 ### To initialize the migrations for the first time, run:
 
-*flask db init*
+```flask db init```
 
 This will create the migrations folder and the necessary configuration files inside it.
 
 ### To generate a migration script after modifying the database models, use:
 
-*flask db migrate -m "message"*
+```flask db migrate -m "message"```
 
 Where "message" is a brief description of the changes made.
 
 ### Finally, to apply the migrations to the database, use:
 
-*flask db upgrade*
+```flask db upgrade```
 
 
 
@@ -202,4 +202,4 @@ Where "message" is a brief description of the changes made.
 
 
 <br/>
-Live link: <a href="https://scssr.tech">SCISSOR</a>
+Live link:[SCISSOR](https://scssr.tech)
