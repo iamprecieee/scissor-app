@@ -202,5 +202,4 @@ Where "message" is a brief description of the changes made.
 
 
 <br/>
-Live link: 
-![SCISSOR](https://scssr.tech)
+Live link: <a href="https://scssr.tech">SCISSOR</a>
