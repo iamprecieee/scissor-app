@@ -1,0 +1,13 @@
+name: Keep Scissor Awake
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+
+jobs:
+  wake_app:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Ping Scissor
+      run: curl -sS https://scssr.tech
