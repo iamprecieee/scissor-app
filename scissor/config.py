@@ -2,7 +2,7 @@ import os
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY")
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI")
-    SERVER_NAME = os.getenv("SERVER_NAME", 'scssr.tech')
+    SERVER_NAME = os.getenv("SERVER_NAME")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     REDIS_URL = os.getenv("REDIS_URL")
     CACHE_TYPE = 'redis'
@@ -13,7 +13,7 @@ class Config:
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.getenv("MAIL_USERNAME")
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
-    MAIL_DEFAULT_SENDER = 'Sender Name <scssr.tech@gmail.com>'
+    MAIL_DEFAULT_SENDER = os.getenv("MAIL_DEFAULT_SENDER")
     TOKEN_URL = os.getenv("TOKEN_URL")
     CLIENT_ID = os.getenv("CLIENT_ID")
     CLIENT_SECRET = os.getenv("CLIENT_SECRET")
