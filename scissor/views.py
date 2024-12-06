@@ -67,17 +67,10 @@ def dashboard():
 @limit("10 per minute")
 def shortenurl():
     if request.method == "POST":
-        text = request.form.get('text')
-        if not text:
-            session['message'] = 'Text cannot be empty!'
-            session['message_type'] = 'error'
-            message = session.pop('message')
-            message_type = session.pop('message_type')
-            return render_template("shortenurl.html", message=message, message_type=message_type)
-        else:
+        if text := request.form.get('text'):
             original_url = text
             stage = app.config['MYSTERY']
-            if original_url == 'https://' + stage:
+            if original_url == f'https://{stage}':
                 return redirect(url_for('views.mystery'))
             elif not validate_url(original_url):
                 session['message'] = 'Invalid URL!'
@@ -88,19 +81,25 @@ def shortenurl():
             else:
                 short_url = generate_short_url()
                 existing_url = Url.query.filter_by(original_url=original_url, user_id=current_user.id).first()
-                if existing_url is not None:
-                    session['message'] = 'URL already exists!'
-                    session['message_type'] = 'error'
-                    message = session.pop('message')
-                    message_type = session.pop('message_type')
-                    return render_template("shortenurl.html", message=message, message_type=message_type)
-                else:
+                if existing_url is None:
                     new_url = Url(original_url=original_url, short_url=short_url, user_id=current_user.id)
                     db.session.add(new_url)
                     db.session.commit()
                     session['message'] = 'Post created!'
                     session['message_type'] = 'success'
                     return redirect(url_for('views.dashboard'))
+                else:
+                    session['message'] = 'URL already exists!'
+                    session['message_type'] = 'error'
+                    message = session.pop('message')
+                    message_type = session.pop('message_type')
+                    return render_template("shortenurl.html", message=message, message_type=message_type)
+        else:
+            session['message'] = 'Text cannot be empty!'
+            session['message_type'] = 'error'
+            message = session.pop('message')
+            message_type = session.pop('message_type')
+            return render_template("shortenurl.html", message=message, message_type=message_type)
     return render_template("shortenurl.html")
 
 @views.route("/customurl", methods=['GET', 'POST'])
@@ -110,7 +109,7 @@ def customurl():
     if request.method == "POST":
         text = request.form.get('text')
         text2 = request.form['text2']
-        
+
         if not text or not text2:
             session['message'] = 'Text cannot be empty!'
             session['message_type'] = 'error'
@@ -120,14 +119,14 @@ def customurl():
         else:
             original_url = text
             stage = app.config['MYSTERY']
-            if original_url == 'https://' + stage:
+            if original_url == f'https://{stage}':
                 return redirect(url_for('views.mystery'))
             elif not validate_url(original_url):
                 session['message'] = 'Invalid URL!'
                 session['message_type'] = 'error'
                 message = session.pop('message')
                 message_type = session.pop('message_type')
-                return render_template("customurl.html", message=message, message_type=message_type) 
+                return render_template("customurl.html", message=message, message_type=message_type)
             if text2:
                 link_exists = CustomUrl.query.filter_by(custom_short_url=text2).first()
                 link2_exists = Url.query.filter_by(short_url=text2).first()
@@ -222,8 +221,7 @@ def update(url_key):
     host = request.host_url
     if custom_url:
         if request.method == 'POST':
-            custom_path = request.form['custom_path']
-            if custom_path:
+            if custom_path := request.form['custom_path']:
                 link_exists = CustomUrl.query.filter_by(custom_short_url=custom_path).first()
                 link2_exists = Url.query.filter_by(short_url=custom_path).first()
                 if link_exists:
@@ -283,20 +281,16 @@ def count_total_users():
     return User.query.count()
 
 def count_total_clicks():
-    total_clicks = 0
-    for url in Url.query.all():
-        total_clicks += url.click_count
+    total_clicks = sum(url.click_count for url in Url.query.all())
     for custom_url in CustomUrl.query.all():
         total_clicks += custom_url.click_count
     return total_clicks
 
 def count_clicks_by_type():
-    total_clicks_custom_urls = 0
-    total_clicks_non_custom_urls = 0
-    for custom_url in CustomUrl.query.all():
-        total_clicks_custom_urls += custom_url.click_count
-    for url in Url.query.all():
-        total_clicks_non_custom_urls += url.click_count
+    total_clicks_custom_urls = sum(
+        custom_url.click_count for custom_url in CustomUrl.query.all()
+    )
+    total_clicks_non_custom_urls = sum(url.click_count for url in Url.query.all())
     return total_clicks_custom_urls, total_clicks_non_custom_urls
 
 

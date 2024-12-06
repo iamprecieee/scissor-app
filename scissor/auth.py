@@ -96,8 +96,7 @@ def logout():
 def initiate_password_reset(email=None):
     if not email:
         email = request.form.get('email')
-    user = User.query.filter_by(email=email).first()
-    if user:
+    if user := User.query.filter_by(email=email).first():
         # create a token with the user's email
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
         token = serializer.dumps(email, salt='email-confirm')
@@ -109,7 +108,7 @@ def initiate_password_reset(email=None):
         msg = Message('Password Reset Request',
                       sender='noreply@scssr.tech',
                       recipients=[email])
-        
+
         with app.app_context():
             email_content = render_template("password_reset_email.html", username=user.username, reset_link=reset_link, email=email)
         msg.html = email_content
@@ -123,19 +122,17 @@ def initiate_password_reset(email=None):
         except Exception:
             session['message'] = 'Failed to send reset email!'
             session['message_type'] = 'error'
-        return redirect(url_for("auth.login"))
     else:
         session['message'] = 'Email not found!'
         session['message_type'] = 'error'
-        return redirect(url_for("auth.login"))
+    return redirect(url_for("auth.login"))
 
 @auth.route("/forgot_password", methods=['GET', 'POST'])
 @limit("10 per minute")
 def forgot_password():
     if request.method == 'POST':
         email = request.form.get("email")
-        user = User.query.filter_by(email=email).first()
-        if user:
+        if user := User.query.filter_by(email=email).first():
             # Construct the authorization URL for Google OAuth 2.0
             authorization_base_url = "https://accounts.google.com/o/oauth2/auth"
             client_id = app.config['CLIENT_ID']
@@ -192,18 +189,14 @@ def oauth_callback():
         response = requests.get(userinfo_url, headers=headers)
         if response.status_code == 200:
             user_info = response.json()
-            # Verify that the email associated with the access token matches the reset email
             if user_info['email'] == email:
                 return initiate_password_reset(email)
-            else:
-                session['message'] = 'OAuth email does not match the reset email.'
-                session['message_type'] = 'error'
+            session['message'] = 'OAuth email does not match the reset email.'
         else:
             session['message'] = 'Failed to get user information.'
-            session['message_type'] = 'error'
     else:
         session['message'] = 'Failed to obtain an access token.'
-        session['message_type'] = 'error'
+    session['message_type'] = 'error'
     return redirect(url_for("auth.login"))
 
 @auth.route("/reset_password/<token>", methods=['GET', 'POST'])
@@ -235,9 +228,8 @@ def reset_password(token):
             db.session.commit()
             session['message'] = 'Your password has been updated!'
             session['message_type'] = 'success'
-            return redirect(url_for("auth.login"))
         else:
             session['message'] = 'User not found!'
             session['message_type'] = 'error'
-            return redirect(url_for("auth.login"))
+        return redirect(url_for("auth.login"))
     return render_template("reset_password.html")
